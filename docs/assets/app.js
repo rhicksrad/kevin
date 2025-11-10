@@ -158,6 +158,37 @@ const FRACTION_VALUES = {
   '⅞': 0.875,
 };
 
+function parseScoreValue(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+
+    const numeric = Number.parseFloat(trimmed.replace(/[^0-9.+-]/g, ''));
+    if (Number.isNaN(numeric) || !Number.isFinite(numeric)) {
+      return null;
+    }
+    return numeric;
+  }
+
+  return null;
+}
+
+function getWeeklyScore(player, standings, weekName) {
+  if (!player) return null;
+
+  const fromPlayer = parseScoreValue(player.total_points);
+  if (fromPlayer !== null) return fromPlayer;
+
+  const standingsEntry = standings?.[player.name];
+  if (!standingsEntry) return null;
+
+  return parseScoreValue(standingsEntry[weekName]);
+}
+
 function computeLeaderboard(standings) {
   if (!standings) return [];
 
@@ -412,22 +443,21 @@ function renderSchedule(week) {
   }
 }
 
-function renderSummary(players, standingsForWeek) {
+function renderSummary(players, scoresByPlayer) {
   if (!summaryContainer) return;
 
   summaryContainer.innerHTML = '';
   if (!players.length) return;
 
-  const activePlayers = players.filter((player) => standingsForWeek.has(player.name));
-  const scoredPlayers = activePlayers.filter((player) =>
-    typeof standingsForWeek.get(player.name) === 'number'
-  );
+  const scoredPlayers = players.filter((player) => scoresByPlayer.has(player.name));
   const playersWithLines = players.filter(
     (player) => normaliseLineValue(player.best_bet?.line) !== null
   );
-  const avgScore =
-    scoredPlayers.reduce((acc, player) => acc + standingsForWeek.get(player.name), 0) /
-    (scoredPlayers.length || 1);
+  const totalScore = scoredPlayers.reduce(
+    (acc, player) => acc + (scoresByPlayer.get(player.name) ?? 0),
+    0
+  );
+  const avgScore = totalScore / (scoredPlayers.length || 1);
 
   const cards = [
     { title: 'Players Tracked', value: players.length },
@@ -461,23 +491,26 @@ function renderPlayers(week, standings, weekName) {
   }
   playersEmptyState.hidden = true;
 
-  const standingsForWeek = new Map();
-  for (const [playerName, scores] of Object.entries(standings)) {
-    if (scores && weekName in scores) {
-      standingsForWeek.set(playerName, scores[weekName]);
+  const scoresByPlayer = new Map();
+  for (const player of week.players) {
+    const score = getWeeklyScore(player, standings, weekName);
+    if (score !== null) {
+      scoresByPlayer.set(player.name, score);
     }
   }
 
-  renderSummary(week.players, standingsForWeek);
+  renderSummary(week.players, scoresByPlayer);
 
   for (const player of week.players) {
     const row = document.createElement('tr');
     const picksSummary = player.picks
       .map((pick) => `${pick.points} pts – ${pick.team}`)
       .join('\n');
-    const weeklyScore = standingsForWeek.has(player.name)
-      ? standingsForWeek.get(player.name)
-      : '—';
+    let weeklyScore = '—';
+    if (scoresByPlayer.has(player.name)) {
+      const score = scoresByPlayer.get(player.name);
+      weeklyScore = fmtNumber(score, Number.isInteger(score) ? 0 : 1);
+    }
     const bestBet = player.best_bet
       ? `${player.best_bet.team || '—'} (${formatLine(player.best_bet.line)})`
       : '—';
@@ -530,8 +563,14 @@ function renderHeatmap(week, standings, weekName) {
   for (const player of week.players || []) {
     const originalLine = player.best_bet?.line;
     const line = normaliseLineValue(originalLine);
-    const score = standings[player.name]?.[weekName];
-    if (typeof line !== 'number' || !Number.isFinite(line) || typeof score !== 'number') continue;
+    const score = getWeeklyScore(player, standings, weekName);
+    if (
+      typeof line !== 'number' ||
+      !Number.isFinite(line) ||
+      typeof score !== 'number' ||
+      !Number.isFinite(score)
+    )
+      continue;
     entries.push({
       player: player.name,
       line,
@@ -629,8 +668,8 @@ function prepareScatterData(week, standings, weekName) {
   for (const player of week.players || []) {
     const lineValue = normaliseLineValue(player.best_bet?.line);
     if (!player.best_bet || typeof lineValue !== 'number' || !Number.isFinite(lineValue)) continue;
-    const score = standings[player.name]?.[weekName];
-    if (typeof score !== 'number') continue;
+    const score = getWeeklyScore(player, standings, weekName);
+    if (typeof score !== 'number' || !Number.isFinite(score)) continue;
     points.push({
       x: lineValue,
       y: score,
