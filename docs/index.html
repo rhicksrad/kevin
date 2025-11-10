@@ -33,6 +33,32 @@
     </header>
 
     <main class="layout">
+      <section class="panel panel--wide" aria-labelledby="leaderboard-heading">
+        <div class="panel__header">
+          <h2 id="leaderboard-heading">Season Leaderboard</h2>
+          <p class="panel__subtitle">
+            Combined official scores for every week played, ranked highest to lowest.
+          </p>
+        </div>
+        <div class="table-wrapper">
+          <table id="leaderboard-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Player</th>
+                <th scope="col">Total Score</th>
+                <th scope="col">Weeks Played</th>
+                <th scope="col">Average</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p id="leaderboard-empty" class="empty-state" hidden>
+            No leaderboard data is available yet.
+          </p>
+        </div>
+      </section>
+
       <section class="panel" aria-labelledby="schedule-heading">
         <div class="panel__header">
           <h2 id="schedule-heading">Matchups &amp; Lines</h2>

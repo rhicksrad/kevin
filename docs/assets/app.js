@@ -5,6 +5,8 @@ const scheduleEmptyState = document.querySelector('#schedule-empty');
 const playersTableBody = document.querySelector('#players-table tbody');
 const playersEmptyState = document.querySelector('#players-empty');
 const summaryContainer = document.querySelector('#player-summary');
+const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
+const leaderboardEmptyState = document.querySelector('#leaderboard-empty');
 const heatmapTableHead = document.querySelector('#heatmap-table thead');
 const heatmapTableBody = document.querySelector('#heatmap-table tbody');
 const heatmapEmptyState = document.querySelector('#heatmap-empty');
@@ -27,6 +29,72 @@ const FRACTION_VALUES = {
   '⅝': 0.625,
   '⅞': 0.875,
 };
+
+function computeLeaderboard(standings) {
+  if (!standings) return [];
+
+  const entries = [];
+  for (const [player, weeks] of Object.entries(standings)) {
+    if (!weeks || typeof weeks !== 'object') continue;
+    const scores = Object.values(weeks).filter((score) =>
+      typeof score === 'number' && Number.isFinite(score)
+    );
+    if (!scores.length) continue;
+
+    const total = scores.reduce((sum, score) => sum + score, 0);
+    entries.push({
+      player,
+      total,
+      weeksPlayed: scores.length,
+      average: total / scores.length,
+    });
+  }
+
+  return entries.sort((a, b) => {
+    if (b.total !== a.total) return b.total - a.total;
+    if (b.weeksPlayed !== a.weeksPlayed) return b.weeksPlayed - a.weeksPlayed;
+    if (b.average !== a.average) return b.average - a.average;
+    return a.player.localeCompare(b.player);
+  });
+}
+
+function renderLeaderboard(standings) {
+  if (!leaderboardTableBody || !leaderboardEmptyState) return;
+
+  leaderboardTableBody.innerHTML = '';
+
+  const leaderboard = computeLeaderboard(standings);
+  if (!leaderboard.length) {
+    leaderboardEmptyState.hidden = false;
+    return;
+  }
+
+  leaderboardEmptyState.hidden = true;
+
+  leaderboard.forEach((entry, index) => {
+    const row = document.createElement('tr');
+    if (index === 0) row.classList.add('leaderboard__row--leader');
+
+    const cells = [
+      { value: index + 1, className: 'leaderboard__rank' },
+      { value: entry.player },
+      { value: fmtNumber(entry.total, 0) },
+      { value: entry.weeksPlayed },
+      { value: fmtNumber(entry.average, 1) },
+    ];
+
+    for (const cellData of cells) {
+      const cell = document.createElement('td');
+      cell.textContent = cellData.value;
+      if (cellData.className) {
+        cell.classList.add(cellData.className);
+      }
+      row.appendChild(cell);
+    }
+
+    leaderboardTableBody.appendChild(row);
+  });
+}
 
 function normaliseLineValue(line) {
   if (typeof line === 'number' && Number.isFinite(line)) {
@@ -460,6 +528,8 @@ async function init() {
     const generated = new Date(dataset.generatedAt);
     generatedAtEl.textContent = `Data refreshed ${generated.toLocaleString()}`;
   }
+
+  renderLeaderboard(dataset.standings);
 
   dataset.weeks
     .filter((week) => week.players.length || week.schedule.length)

@@ -170,6 +170,25 @@ table td {
   text-align: left;
 }
 
+#leaderboard-table tbody td {
+  vertical-align: middle;
+}
+
+.leaderboard__rank {
+  font-weight: 700;
+  text-align: center;
+  width: 4rem;
+}
+
+.leaderboard__row--leader td {
+  font-weight: 700;
+}
+
+.leaderboard__row--leader .leaderboard__rank {
+  color: var(--accent-strong);
+  font-size: 1.2rem;
+}
+
 table tbody tr:nth-child(even) {
   background: rgba(148, 163, 184, 0.1);
 }
