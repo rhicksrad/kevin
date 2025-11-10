@@ -183,6 +183,35 @@ function parseScoreValue(value) {
   return null;
 }
 
+function computeScoreFromPicks(picks) {
+  if (!Array.isArray(picks) || picks.length === 0) return null;
+
+  let total = 0;
+  let hasPick = false;
+
+  for (const pick of picks) {
+    if (!pick) continue;
+
+    hasPick = true;
+
+    const awarded = parseScoreValue(pick.awarded_points);
+    if (awarded === null) {
+      const result = typeof pick.result === 'string' ? pick.result.trim().toLowerCase() : '';
+      if (!result || result === 'pending') {
+        return null;
+      }
+      if (result === 'loss') {
+        continue;
+      }
+      return null;
+    }
+
+    total += awarded;
+  }
+
+  return hasPick ? total : null;
+}
+
 function getWeeklyScore(player, standings, weekName) {
   if (!player) return null;
 
@@ -190,9 +219,12 @@ function getWeeklyScore(player, standings, weekName) {
   if (fromPlayer !== null) return fromPlayer;
 
   const standingsEntry = standings?.[player.name];
-  if (!standingsEntry) return null;
+  if (standingsEntry) {
+    const fromStandings = parseScoreValue(standingsEntry[weekName]);
+    if (fromStandings !== null) return fromStandings;
+  }
 
-  return parseScoreValue(standingsEntry[weekName]);
+  return computeScoreFromPicks(player.picks);
 }
 
 function computeLeaderboard(standings) {
@@ -660,13 +692,18 @@ function renderSummary(players, scoresByPlayer) {
     (acc, player) => acc + (scoresByPlayer.get(player.name) ?? 0),
     0
   );
-  const avgScore = totalScore / (scoredPlayers.length || 1);
+  const avgScore = scoredPlayers.length
+    ? totalScore / scoredPlayers.length
+    : null;
 
   const cards = [
     { title: 'Players Tracked', value: players.length },
     { title: 'With Official Scores', value: scoredPlayers.length },
     { title: 'Best Bets Logged', value: playersWithLines.length },
-    { title: 'Average Score', value: fmtNumber(avgScore, 1) },
+    {
+      title: 'Average Score',
+      value: avgScore === null ? '—' : fmtNumber(avgScore, 1),
+    },
   ];
 
   for (const card of cards) {
@@ -697,36 +734,36 @@ function renderPlayers(week, standings, weekName) {
   const scoresByPlayer = new Map();
   for (const player of week.players) {
     const score = getWeeklyScore(player, standings, weekName);
-    if (score !== null) {
+    if (typeof score === 'number' && Number.isFinite(score)) {
       scoresByPlayer.set(player.name, score);
     }
   }
 
   renderSummary(week.players, scoresByPlayer);
 
-  const playersForTable =
-    weekName === 'Week 13'
-      ? [...week.players].sort((a, b) => {
-          const scoreA = scoresByPlayer.get(a.name);
-          const scoreB = scoresByPlayer.get(b.name);
+  const playersForTable = week.players
+    .map((player, index) => ({ player, index }))
+    .sort((a, b) => {
+      const scoreA = scoresByPlayer.get(a.player.name);
+      const scoreB = scoresByPlayer.get(b.player.name);
 
-          const hasScoreA = Number.isFinite(scoreA);
-          const hasScoreB = Number.isFinite(scoreB);
+      const hasScoreA = Number.isFinite(scoreA);
+      const hasScoreB = Number.isFinite(scoreB);
 
-          if (hasScoreA && hasScoreB) {
-            if (scoreA !== scoreB) return scoreB - scoreA;
-            return a.name.localeCompare(b.name);
-          }
+      if (hasScoreA && hasScoreB) {
+        if (scoreA !== scoreB) return scoreB - scoreA;
+        return a.player.name.localeCompare(b.player.name);
+      }
 
-          if (hasScoreA) return -1;
-          if (hasScoreB) return 1;
-          return a.name.localeCompare(b.name);
-        })
-      : week.players;
+      if (hasScoreA) return -1;
+      if (hasScoreB) return 1;
+      return a.index - b.index;
+    })
+    .map((entry) => entry.player);
 
   for (const player of playersForTable) {
     const row = document.createElement('tr');
-    const picksSummary = player.picks
+    const picksSummary = (Array.isArray(player.picks) ? player.picks : [])
       .map((pick) => {
         const totalPoints = fmtNumber(parseScoreValue(pick.points) ?? pick.points, 0);
         const awarded =
