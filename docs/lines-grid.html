@@ -14,7 +14,7 @@
     <script src="assets/app.js" type="module" defer></script>
   </head>
   <body>
-    <header class="hero">
+    <header class="site-header">
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="site-nav__brand" href="index.html">Grid Insights</a>
         <ul class="site-nav__links">
@@ -25,21 +25,14 @@
           <li><a href="lines-grid.html" aria-current="page">Lines &amp; Scores Grid</a></li>
         </ul>
       </nav>
-      <div class="hero__content">
-        <h1>Lines &amp; Scores Grid</h1>
-        <p>
-          Compare every player’s best bet line to their official score. The heatmap
-          highlights the high and low performers for each spread value.
-        </p>
-        <div class="hero__meta">
-          <label for="week-select">Week</label>
-          <select id="week-select" aria-label="Select week"></select>
-          <span id="generated-at" class="hero__timestamp"></span>
-        </div>
-      </div>
     </header>
 
     <main class="layout">
+      <div class="layout__toolbar">
+        <label for="week-select">Week</label>
+        <select id="week-select" aria-label="Select week"></select>
+        <span id="generated-at" class="layout__timestamp"></span>
+      </div>
       <section class="panel panel--wide" aria-labelledby="heatmap-heading" id="heatmap-panel">
         <div class="panel__header">
           <h2 id="heatmap-heading">Lines &amp; Scores Grid</h2>
