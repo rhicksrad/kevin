@@ -278,6 +278,8 @@ function aggregateTeamStats(weeks) {
         if (!teamName) continue;
 
         const points = parseScoreValue(pick.points);
+        const awarded =
+          typeof pick.awarded_points === 'number' ? pick.awarded_points : null;
         let entry = stats.get(teamName);
         if (!entry) {
           entry = { team: teamName, betCount: 0, totalPoints: 0, weekNames: new Set() };
@@ -285,8 +287,10 @@ function aggregateTeamStats(weeks) {
         }
 
         entry.betCount += 1;
-        if (points !== null) {
-          entry.totalPoints += points;
+        if (awarded !== null) {
+          entry.totalPoints += awarded;
+        } else if (points !== null && !Number.isNaN(points)) {
+          entry.totalPoints += 0;
         }
         if (typeof week.name === 'string' && week.name.trim()) {
           entry.weekNames.add(week.name);
@@ -703,7 +707,32 @@ function renderPlayers(week, standings, weekName) {
   for (const player of week.players) {
     const row = document.createElement('tr');
     const picksSummary = player.picks
-      .map((pick) => `${pick.points} pts – ${pick.team}`)
+      .map((pick) => {
+        const totalPoints = fmtNumber(parseScoreValue(pick.points) ?? pick.points, 0);
+        const awarded =
+          typeof pick.awarded_points === 'number' ? pick.awarded_points : null;
+        const result = typeof pick.result === 'string' ? pick.result : '';
+
+        const parts = [];
+        if (awarded !== null) {
+          parts.push(`${fmtNumber(awarded, 0)} / ${totalPoints} pts`);
+        } else {
+          parts.push(`${totalPoints} pts`);
+        }
+        parts.push('–');
+        parts.push(pick.team || '—');
+
+        if (result) {
+          let label;
+          if (result === 'win') label = 'Win';
+          else if (result === 'loss') label = 'Loss';
+          else if (result === 'pending') label = 'Pending';
+          else label = result;
+          parts.push(`(${label})`);
+        }
+
+        return parts.join(' ');
+      })
       .join('\n');
     let weeklyScore = '—';
     if (scoresByPlayer.has(player.name)) {
