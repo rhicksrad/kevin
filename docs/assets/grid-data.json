@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-11-10T19:22:12.139201+00:00",
+  "generatedAt": "2025-11-10T19:42:38.583410+00:00",
   "weeks": [
     {
       "name": "Week 1",
@@ -3724,11 +3724,6 @@
           "team": "East Carolina",
           "line": null,
           "date": "2025-08-28T00:00:00"
-        },
-        {
-          "team": "TOP 25 - CANNOT BE USED FOR SURVIVOR",
-          "line": null,
-          "date": null
         }
       ],
       "confidence_points": [
@@ -5634,20 +5629,12 @@
       ],
       "schedule": [
         {
-          "team": "",
+          "team": "James Madison",
           "line": null,
-          "date": "James Madison",
-          "opponent": "-14\u00a0",
-          "time": "Louisville",
-          "opponent_line": null
-        },
-        {
-          "team": "RK",
-          "line": "Team",
-          "date": null,
-          "opponent": "1",
-          "time": null,
-          "opponent_line": "Ohio State(55)"
+          "date": "2025-09-05T00:00:00",
+          "opponent": "Louisville",
+          "time": "4:00p",
+          "opponent_line": "-14\u00a0"
         }
       ],
       "confidence_points": [
@@ -9382,18 +9369,7 @@
           "best_bet": null
         }
       ],
-      "schedule": [
-        {
-          "team": "",
-          "line": null,
-          "date": "COLLEGE FOOTBALL - Thursday, September 11th"
-        },
-        {
-          "team": "",
-          "line": null,
-          "date": "NFL WEEK 2 - Thursday, September 11th"
-        }
-      ],
+      "schedule": [],
       "confidence_points": [
         10,
         8,
@@ -24601,13 +24577,7 @@
           "best_bet": null
         }
       ],
-      "schedule": [
-        {
-          "team": "Teams",
-          "line": "Circa",
-          "date": "Time"
-        }
-      ],
+      "schedule": [],
       "confidence_points": [
         10,
         8,
