@@ -141,10 +141,116 @@ function formatLine(line) {
   return line;
 }
 
-function renderSchedule(schedule) {
+function buildScheduleFromBestBets(week) {
+  if (!week?.players) return [];
+
+  const entries = [];
+
+  for (const player of week.players) {
+    const bestBet = player.best_bet;
+    if (!bestBet) continue;
+
+    const hasTeam = typeof bestBet.team === 'string' && bestBet.team.trim();
+    const hasLine =
+      bestBet.line !== null && bestBet.line !== undefined && `${bestBet.line}`.trim();
+    const hasTime = typeof bestBet.time === 'string' && bestBet.time.trim();
+
+    if (!hasTeam && !hasLine && !hasTime) continue;
+
+    let timeValue = bestBet.time ?? null;
+    let dateValue = null;
+
+    if (typeof bestBet.time === 'string') {
+      const trimmedTime = bestBet.time.trim();
+      if (trimmedTime.includes('T')) {
+        const parsed = new Date(trimmedTime);
+        if (!Number.isNaN(parsed.getTime())) {
+          dateValue = trimmedTime;
+          if (/T00:00(?::00)?/.test(trimmedTime)) {
+            timeValue = null;
+          }
+        }
+      }
+    }
+
+    entries.push({
+      team: hasTeam ? bestBet.team : '',
+      line: bestBet.line ?? null,
+      time: timeValue,
+      opponent: '',
+      opponent_line: null,
+      date: dateValue,
+      player: player.name,
+    });
+  }
+
+  const parseTime = (value) => {
+    if (!value) return Number.POSITIVE_INFINITY;
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.getTime();
+    }
+
+    if (typeof value === 'string') {
+      const match = value
+        .toLowerCase()
+        .trim()
+        .match(/^(\d{1,2})(?::(\d{2}))?\s*([ap])m?$/i);
+      if (match) {
+        const [, hours, minutes, period] = match;
+        let hour = Number.parseInt(hours, 10) % 12;
+        if (period === 'p') hour += 12;
+        const minute = Number.parseInt(minutes ?? '0', 10);
+        return hour * 60 + minute;
+      }
+      const numeric = Number.parseFloat(value);
+      if (!Number.isNaN(numeric)) {
+        return numeric;
+      }
+    }
+
+    return Number.POSITIVE_INFINITY;
+  };
+
+  entries.sort((a, b) => {
+    const timeDiff = parseTime(a.time ?? a.date) - parseTime(b.time ?? b.date);
+    if (timeDiff !== 0) return timeDiff;
+    return a.player.localeCompare(b.player);
+  });
+
+  return entries;
+}
+
+function formatTime(value) {
+  if (!value) return '—';
+  const parsed = new Date(value);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return '—';
+    return trimmed;
+  }
+  return String(value);
+}
+
+function renderSchedule(week) {
   if (!scheduleTableBody || !scheduleEmptyState) return;
 
   scheduleTableBody.innerHTML = '';
+  if (!week) {
+    scheduleEmptyState.hidden = false;
+    return;
+  }
+
+  const officialSchedule = Array.isArray(week.schedule) ? week.schedule : [];
+  let schedule = officialSchedule.filter((game) => game);
+
+  if (schedule.length === 0) {
+    schedule = buildScheduleFromBestBets(week);
+  }
+
   if (!schedule || schedule.length === 0) {
     scheduleEmptyState.hidden = false;
     return;
@@ -160,12 +266,14 @@ function renderSchedule(schedule) {
         ? game.date
         : parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     }
+    const timeDisplay = formatTime(game.time);
+    const opponentDisplay = game.opponent || (game.player ? `Best bet · ${game.player}` : '—');
     const cells = [
       game.team || '—',
-      game.opponent || '—',
+      opponentDisplay,
       formatLine(game.line ?? game.opponent_line),
       dateDisplay,
-      game.time || '—',
+      timeDisplay,
     ];
     for (const value of cells) {
       const cell = document.createElement('td');
@@ -541,7 +649,7 @@ function updateWeek(weekName) {
   const week = dataset.weeks.find((entry) => entry.name === weekName);
   if (!week) return;
 
-  renderSchedule(week.schedule);
+  renderSchedule(week);
   renderPlayers(week, dataset.standings, weekName);
   renderCharts(week, dataset.standings, weekName);
   renderHeatmap(week, dataset.standings, weekName);
