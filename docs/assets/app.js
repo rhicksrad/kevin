@@ -12,6 +12,12 @@ const heatmapTableBody = document.querySelector('#heatmap-table tbody');
 const heatmapEmptyState = document.querySelector('#heatmap-empty');
 const heatmapLegend = document.querySelector('#heatmap-legend .heatmap-legend__gradient');
 const heatmapPanel = document.querySelector('#heatmap-panel');
+const teamWeekSelect = document.querySelector('#team-week-select');
+const teamSummaryContainer = document.querySelector('#team-summary');
+const teamBetsTableBody = document.querySelector('#team-bets-table tbody');
+const teamBetsEmptyState = document.querySelector('#team-bets-empty');
+const teamPointsTableBody = document.querySelector('#team-points-table tbody');
+const teamPointsEmptyState = document.querySelector('#team-points-empty');
 
 let dataset;
 let scatterChart;
@@ -253,6 +259,199 @@ function renderLeaderboard(standings) {
 
     leaderboardTableBody.appendChild(row);
   });
+}
+
+function aggregateTeamStats(weeks) {
+  if (!Array.isArray(weeks)) return [];
+
+  const stats = new Map();
+
+  for (const week of weeks) {
+    if (!week || !Array.isArray(week.players)) continue;
+
+    for (const player of week.players) {
+      if (!player || !Array.isArray(player.picks)) continue;
+
+      for (const pick of player.picks) {
+        if (!pick) continue;
+        const teamName = typeof pick.team === 'string' ? pick.team.trim() : '';
+        if (!teamName) continue;
+
+        const points = parseScoreValue(pick.points);
+        let entry = stats.get(teamName);
+        if (!entry) {
+          entry = { team: teamName, betCount: 0, totalPoints: 0, weekNames: new Set() };
+          stats.set(teamName, entry);
+        }
+
+        entry.betCount += 1;
+        if (points !== null) {
+          entry.totalPoints += points;
+        }
+        if (typeof week.name === 'string' && week.name.trim()) {
+          entry.weekNames.add(week.name);
+        }
+      }
+    }
+  }
+
+  return Array.from(stats.values()).map((entry) => ({
+    team: entry.team,
+    betCount: entry.betCount,
+    totalPoints: entry.totalPoints,
+    averagePoints: entry.betCount ? entry.totalPoints / entry.betCount : 0,
+    weekCount: entry.weekNames ? entry.weekNames.size : 0,
+  }));
+}
+
+function renderTeamStats(weeks, selectedWeek) {
+  if (
+    !teamBetsTableBody ||
+    !teamBetsEmptyState ||
+    !teamPointsTableBody ||
+    !teamPointsEmptyState
+  ) {
+    if (teamSummaryContainer) {
+      teamSummaryContainer.innerHTML = '';
+    }
+    return;
+  }
+
+  teamBetsTableBody.innerHTML = '';
+  teamPointsTableBody.innerHTML = '';
+
+  const filteredWeeks = Array.isArray(weeks)
+    ? weeks.filter((week) => !selectedWeek || week?.name === selectedWeek)
+    : [];
+
+  const stats = aggregateTeamStats(filteredWeeks);
+
+  if (teamSummaryContainer) {
+    teamSummaryContainer.innerHTML = '';
+  }
+
+  if (!stats.length) {
+    teamBetsEmptyState.hidden = false;
+    teamPointsEmptyState.hidden = false;
+    return;
+  }
+
+  teamBetsEmptyState.hidden = true;
+  teamPointsEmptyState.hidden = true;
+
+  const formatPoints = (value) => fmtNumber(value, Number.isInteger(value) ? 0 : 1);
+
+  const byCount = [...stats].sort((a, b) => {
+    if (b.betCount !== a.betCount) return b.betCount - a.betCount;
+    if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+    return a.team.localeCompare(b.team);
+  });
+
+  const byPoints = [...stats].sort((a, b) => {
+    if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+    if (b.weekCount !== a.weekCount) return b.weekCount - a.weekCount;
+    if (b.betCount !== a.betCount) return b.betCount - a.betCount;
+    return a.team.localeCompare(b.team);
+  });
+
+  const maxRows = 25;
+
+  byCount.slice(0, maxRows).forEach((entry, index) => {
+    const row = document.createElement('tr');
+
+    const rankCell = document.createElement('td');
+    rankCell.textContent = String(index + 1);
+    row.appendChild(rankCell);
+
+    const teamCell = document.createElement('td');
+    teamCell.textContent = entry.team;
+    row.appendChild(teamCell);
+
+    const pickedCell = document.createElement('td');
+    pickedCell.textContent = fmtNumber(entry.betCount);
+    row.appendChild(pickedCell);
+
+    const weeksCell = document.createElement('td');
+    weeksCell.textContent = fmtNumber(entry.weekCount);
+    row.appendChild(weeksCell);
+
+    const pointsCell = document.createElement('td');
+    pointsCell.textContent = formatPoints(entry.totalPoints);
+    row.appendChild(pointsCell);
+
+    teamBetsTableBody.appendChild(row);
+  });
+
+  byPoints.slice(0, maxRows).forEach((entry, index) => {
+    const row = document.createElement('tr');
+
+    const rankCell = document.createElement('td');
+    rankCell.textContent = String(index + 1);
+    row.appendChild(rankCell);
+
+    const teamCell = document.createElement('td');
+    teamCell.textContent = entry.team;
+    row.appendChild(teamCell);
+
+    const totalPointsCell = document.createElement('td');
+    totalPointsCell.textContent = formatPoints(entry.totalPoints);
+    row.appendChild(totalPointsCell);
+
+    const weeksCell = document.createElement('td');
+    weeksCell.textContent = fmtNumber(entry.weekCount);
+    row.appendChild(weeksCell);
+
+    const timesPickedCell = document.createElement('td');
+    timesPickedCell.textContent = fmtNumber(entry.betCount);
+    row.appendChild(timesPickedCell);
+
+    const avgPointsCell = document.createElement('td');
+    avgPointsCell.textContent = fmtNumber(
+      entry.averagePoints,
+      Number.isInteger(entry.averagePoints) ? 0 : 1
+    );
+    row.appendChild(avgPointsCell);
+
+    teamPointsTableBody.appendChild(row);
+  });
+
+  if (teamSummaryContainer) {
+    const totalPicks = stats.reduce((acc, entry) => acc + entry.betCount, 0);
+    const totalPoints = stats.reduce((acc, entry) => acc + entry.totalPoints, 0);
+    const avgPointsPerPick = totalPicks ? totalPoints / totalPicks : 0;
+    const topByCount = byCount[0];
+    const topByPoints = byPoints[0];
+
+    const cards = [
+      {
+        title: 'Most Picked Team',
+        value: `${topByCount.team} (${fmtNumber(topByCount.betCount)} picks)`,
+      },
+      {
+        title: 'Top Point-Earning Team',
+        value: `${topByPoints.team} (${formatPoints(topByPoints.totalPoints)} pts · ${fmtNumber(
+          topByPoints.weekCount
+        )} wks)`,
+      },
+      { title: 'Unique Teams Picked', value: fmtNumber(stats.length) },
+      { title: 'Total Picks Logged', value: fmtNumber(totalPicks) },
+      {
+        title: 'Average Points per Pick',
+        value: fmtNumber(avgPointsPerPick, Number.isInteger(avgPointsPerPick) ? 0 : 1),
+      },
+    ];
+
+    for (const card of cards) {
+      const div = document.createElement('div');
+      div.className = 'summary-card';
+      const heading = document.createElement('h3');
+      heading.textContent = card.title;
+      const value = document.createElement('p');
+      value.textContent = card.value;
+      div.append(heading, value);
+      teamSummaryContainer.appendChild(div);
+    }
+  }
 }
 
 function normaliseLineValue(line) {
@@ -851,13 +1050,36 @@ async function init() {
 
   renderLeaderboard(dataset.standings);
 
-  const availableWeeks = Array.isArray(dataset.weeks)
-    ? dataset.weeks.filter((week) => (week.players?.length || week.schedule?.length))
-    : [];
-  const defaultWeekName =
-    availableWeeks[0]?.name || dataset.weeks?.[0]?.name || null;
+  const weeks = Array.isArray(dataset.weeks) ? dataset.weeks : [];
+  const availableWeeks = weeks.filter((week) => week.players?.length || week.schedule?.length);
+  const defaultWeekName = availableWeeks[0]?.name || weeks[0]?.name || null;
 
-  if (weekSelect && Array.isArray(dataset.weeks)) {
+  if (teamWeekSelect) {
+    teamWeekSelect.innerHTML = '';
+    const allOption = document.createElement('option');
+    allOption.value = '';
+    allOption.textContent = 'All weeks';
+    allOption.selected = true;
+    teamWeekSelect.appendChild(allOption);
+
+    const weeksForSelect = availableWeeks.length ? availableWeeks : weeks;
+    weeksForSelect.forEach((week) => {
+      if (!week?.name) return;
+      const option = buildOption(week.name);
+      teamWeekSelect.appendChild(option);
+    });
+
+    teamWeekSelect.disabled = !weeksForSelect.length;
+
+    teamWeekSelect.addEventListener('change', (event) => {
+      const selected = event.target.value;
+      renderTeamStats(weeks, selected || null);
+    });
+  }
+
+  renderTeamStats(weeks, teamWeekSelect?.value || null);
+
+  if (weekSelect && weeks.length) {
     availableWeeks.forEach((week, index) => {
       const option = buildOption(week.name);
       if (index === 0) option.selected = true;
@@ -910,5 +1132,25 @@ init().catch((error) => {
   if (leaderboardEmptyState) {
     leaderboardEmptyState.hidden = false;
     leaderboardEmptyState.textContent = 'Failed to load grid data.';
+  }
+  if (teamBetsEmptyState) {
+    teamBetsEmptyState.hidden = false;
+    teamBetsEmptyState.textContent = 'Failed to load grid data.';
+  }
+  if (teamPointsEmptyState) {
+    teamPointsEmptyState.hidden = false;
+    teamPointsEmptyState.textContent = 'Failed to load grid data.';
+  }
+  if (teamBetsTableBody) {
+    teamBetsTableBody.innerHTML = '';
+  }
+  if (teamPointsTableBody) {
+    teamPointsTableBody.innerHTML = '';
+  }
+  if (teamSummaryContainer) {
+    teamSummaryContainer.innerHTML = '';
+  }
+  if (teamWeekSelect) {
+    teamWeekSelect.disabled = true;
   }
 });
