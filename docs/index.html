@@ -113,6 +113,31 @@
           </figure>
         </div>
       </section>
+
+      <section class="panel panel--wide" aria-labelledby="heatmap-heading" id="heatmap-panel">
+        <div class="panel__header">
+          <h2 id="heatmap-heading">Lines &amp; Scores Grid</h2>
+          <p class="panel__subtitle">
+            Compare every player's best bet line with their official weekly score.
+            Cells are color coded so you can instantly spot hot and cold
+            performances for each line.
+          </p>
+        </div>
+        <div class="table-wrapper table-wrapper--heatmap">
+          <table id="heatmap-table" aria-describedby="heatmap-legend">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+          <p id="heatmap-empty" class="empty-state" hidden>
+            No best bet lines with official scores are available for this week.
+          </p>
+        </div>
+        <div class="heatmap-legend" id="heatmap-legend" aria-hidden="true">
+          <span>Lower score</span>
+          <div class="heatmap-legend__gradient"></div>
+          <span>Higher score</span>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">

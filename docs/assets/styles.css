@@ -140,6 +140,10 @@ body {
   border: 1px solid rgba(15, 23, 42, 0.05);
 }
 
+.table-wrapper--heatmap {
+  position: relative;
+}
+
 .table-wrapper table {
   width: 100%;
   border-collapse: collapse;
@@ -174,6 +178,38 @@ table tbody tr:hover {
   background: rgba(14, 165, 233, 0.14);
 }
 
+.table-wrapper--heatmap table td {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  text-align: center;
+  font-weight: 600;
+}
+
+.table-wrapper--heatmap table th:not(:first-child) {
+  text-align: center;
+}
+
+.table-wrapper--heatmap table td[data-score] {
+  border-radius: 12px;
+  color: #0f172a;
+}
+
+.table-wrapper--heatmap table td[data-score]:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+}
+
+.heatmap-cell--empty {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.table-wrapper--heatmap table th:first-child,
+.table-wrapper--heatmap table td:first-child {
+  position: sticky;
+  left: 0;
+  background: inherit;
+}
+
 .empty-state {
   margin: 1.2rem 0;
   font-style: italic;
@@ -205,6 +241,27 @@ table tbody tr:hover {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 700;
+}
+
+.heatmap-legend {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.heatmap-legend__gradient {
+  flex: 1;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fee2e2, #bbf7d0);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+#heatmap-panel[data-empty] .heatmap-legend {
+  display: none;
 }
 
 .panel--wide {
