@@ -704,7 +704,27 @@ function renderPlayers(week, standings, weekName) {
 
   renderSummary(week.players, scoresByPlayer);
 
-  for (const player of week.players) {
+  const playersForTable =
+    weekName === 'Week 13'
+      ? [...week.players].sort((a, b) => {
+          const scoreA = scoresByPlayer.get(a.name);
+          const scoreB = scoresByPlayer.get(b.name);
+
+          const hasScoreA = Number.isFinite(scoreA);
+          const hasScoreB = Number.isFinite(scoreB);
+
+          if (hasScoreA && hasScoreB) {
+            if (scoreA !== scoreB) return scoreB - scoreA;
+            return a.name.localeCompare(b.name);
+          }
+
+          if (hasScoreA) return -1;
+          if (hasScoreB) return 1;
+          return a.name.localeCompare(b.name);
+        })
+      : week.players;
+
+  for (const player of playersForTable) {
     const row = document.createElement('tr');
     const picksSummary = player.picks
       .map((pick) => {
