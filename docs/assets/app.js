@@ -17,6 +17,134 @@ let dataset;
 let scatterChart;
 let barChart;
 
+function getThemeTokens() {
+  const styles = getComputedStyle(document.documentElement);
+  const read = (name, fallback) => {
+    const value = styles.getPropertyValue(name);
+    return value ? value.trim() : fallback;
+  };
+  return {
+    chartScatterBorder: read('--chart-scatter-border', '#db2777'),
+    chartScatterFill: read('--chart-scatter-fill', 'rgba(236, 72, 153, 0.78)'),
+    chartBarFill: read('--chart-bar-fill', 'rgba(79, 70, 229, 0.85)'),
+    chartGrid: read('--chart-grid', 'rgba(100, 116, 139, 0.2)'),
+    chartAxis: read('--chart-axis', '#1f2937'),
+    chartTick: read('--chart-tick', '#475569'),
+    chartTooltip: read('--chart-tooltip', 'rgba(15, 23, 42, 0.92)'),
+    heatmapLow: read('--heatmap-low', '#f97316'),
+    heatmapHigh: read('--heatmap-high', '#22d3ee'),
+    heatmapTextDark: read('--heatmap-text-dark', '#0f172a'),
+    heatmapTextLight: read('--heatmap-text-light', '#f8fafc'),
+  };
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function parseHexChannel(channel) {
+  const hex = Number.parseInt(channel, 16);
+  return Number.isNaN(hex) ? 0 : hex;
+}
+
+function hexToRgba(hex) {
+  const value = hex.replace('#', '').trim();
+  if (![3, 4, 6, 8].includes(value.length)) return null;
+
+  if (value.length === 3 || value.length === 4) {
+    const r = parseHexChannel(value[0] + value[0]);
+    const g = parseHexChannel(value[1] + value[1]);
+    const b = parseHexChannel(value[2] + value[2]);
+    const a = value.length === 4 ? parseHexChannel(value[3] + value[3]) / 255 : 1;
+    return [r, g, b, a];
+  }
+
+  const r = parseHexChannel(value.slice(0, 2));
+  const g = parseHexChannel(value.slice(2, 4));
+  const b = parseHexChannel(value.slice(4, 6));
+  const a = value.length === 8 ? parseHexChannel(value.slice(6, 8)) / 255 : 1;
+  return [r, g, b, a];
+}
+
+function rgbaStringToArray(color) {
+  const match = color
+    .trim()
+    .match(/^rgba?\(\s*([\d.]+%?)\s*,\s*([\d.]+%?)\s*,\s*([\d.]+%?)(?:\s*,\s*([\d.]+))?\s*\)$/i);
+  if (!match) return null;
+
+  const parseChannel = (value) => {
+    if (value.endsWith('%')) {
+      return clamp(Number.parseFloat(value) * 2.55, 0, 255);
+    }
+    return clamp(Number.parseFloat(value), 0, 255);
+  };
+
+  const r = parseChannel(match[1]);
+  const g = parseChannel(match[2]);
+  const b = parseChannel(match[3]);
+  const a = match[4] !== undefined ? clamp(Number.parseFloat(match[4]), 0, 1) : 1;
+  return [r, g, b, a];
+}
+
+function normaliseColor(color) {
+  if (!color) return null;
+  const trimmed = color.trim();
+  if (!trimmed) return null;
+
+  if (trimmed.startsWith('#')) {
+    return hexToRgba(trimmed);
+  }
+
+  if (/^rgba?/i.test(trimmed)) {
+    return rgbaStringToArray(trimmed);
+  }
+
+  const canvas = normaliseColor.canvas || document.createElement('canvas');
+  let ctx = normaliseColor.ctx;
+  if (!ctx && canvas.getContext) {
+    ctx = canvas.getContext('2d');
+    normaliseColor.ctx = ctx;
+  }
+
+  if (ctx) {
+    ctx.fillStyle = '#000';
+    try {
+      ctx.fillStyle = trimmed;
+      const parsed = ctx.fillStyle;
+      if (parsed && parsed !== trimmed) {
+        return normaliseColor(parsed);
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  return null;
+}
+
+function mixColors(start, end, ratio) {
+  const startRgba = normaliseColor(start);
+  const endRgba = normaliseColor(end);
+  if (!startRgba || !endRgba) return null;
+
+  const t = clamp(ratio, 0, 1);
+  const mix = startRgba.map((value, index) => value + (endRgba[index] - value) * t);
+  const [r, g, b, a] = mix;
+  const alpha = Math.round((Number.isFinite(a) ? a : 1) * 1000) / 1000;
+  return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`;
+}
+
+function relativeLuminance(color) {
+  const rgba = normaliseColor(color);
+  if (!rgba) return null;
+  const transform = (channel) => {
+    const value = channel / 255;
+    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+  };
+  const [r, g, b] = rgba;
+  return 0.2126 * transform(r) + 0.7152 * transform(g) + 0.0722 * transform(b);
+}
+
 const fmtNumber = (value, digits = 0) =>
   typeof value === 'number' ? value.toFixed(digits) : value;
 
@@ -376,16 +504,19 @@ function renderPlayers(week, standings, weekName) {
   }
 }
 
-function computeHeatmapColor(score, minScore, maxScore) {
+function computeHeatmapColor(score, minScore, maxScore, theme) {
   if (!Number.isFinite(score)) return null;
   const range = maxScore - minScore;
   const ratio = range === 0 ? 0.5 : (score - minScore) / range;
-  const hue = 10 + ratio * 120; // red to green range
-  const lightness = 55;
-  return {
-    background: `hsl(${hue}, 78%, ${lightness}%)`,
-    text: ratio < 0.35 ? '#f8fafc' : '#0f172a',
-  };
+  const background =
+    mixColors(theme.heatmapLow, theme.heatmapHigh, clamp(ratio, 0, 1)) ||
+    theme.heatmapLow;
+  const luminance = relativeLuminance(background);
+  const textColor =
+    luminance !== null && luminance < 0.55
+      ? theme.heatmapTextLight
+      : theme.heatmapTextDark;
+  return { background, text: textColor };
 }
 
 function renderHeatmap(week, standings, weekName) {
@@ -444,10 +575,13 @@ function renderHeatmap(week, standings, weekName) {
 
   const minScore = Math.min(...entries.map((entry) => entry.score));
   const maxScore = Math.max(...entries.map((entry) => entry.score));
+  const theme = getThemeTokens();
 
   if (heatmapLegend) {
-    const lowColor = computeHeatmapColor(minScore, minScore, maxScore)?.background || '#fee2e2';
-    const highColor = computeHeatmapColor(maxScore, minScore, maxScore)?.background || '#bbf7d0';
+    const lowColor =
+      computeHeatmapColor(minScore, minScore, maxScore, theme)?.background || theme.heatmapLow;
+    const highColor =
+      computeHeatmapColor(maxScore, minScore, maxScore, theme)?.background || theme.heatmapHigh;
     heatmapLegend.style.background = `linear-gradient(90deg, ${lowColor}, ${highColor})`;
   }
 
@@ -464,7 +598,7 @@ function renderHeatmap(week, standings, weekName) {
         (entry) => entry.player === player && entry.line === line
       );
       if (match) {
-        const color = computeHeatmapColor(match.score, minScore, maxScore);
+        const color = computeHeatmapColor(match.score, minScore, maxScore, theme);
         if (color) {
           cell.style.setProperty('--heatmap-color', color.background);
           cell.style.background = color.background;
@@ -540,6 +674,7 @@ function renderCharts(week, standings, weekName) {
 
   const scatterData = prepareScatterData(week, standings, weekName);
   const barData = prepareBarData(scatterData);
+  const theme = getThemeTokens();
 
   if (scatterChart) scatterChart.destroy();
   if (barChart) barChart.destroy();
@@ -552,8 +687,10 @@ function renderCharts(week, standings, weekName) {
           label: 'Line vs. Score',
           data: scatterData,
           parsing: false,
-          borderColor: 'rgba(14, 165, 233, 0.95)',
-          backgroundColor: 'rgba(14, 165, 233, 0.65)',
+          borderColor: theme.chartScatterBorder,
+          backgroundColor: theme.chartScatterFill,
+          pointBackgroundColor: theme.chartScatterFill,
+          pointBorderColor: theme.chartScatterBorder,
           pointRadius: 6,
           pointHoverRadius: 9,
         },
@@ -564,6 +701,11 @@ function renderCharts(week, standings, weekName) {
       maintainAspectRatio: false,
       plugins: {
         tooltip: {
+          backgroundColor: theme.chartTooltip,
+          borderColor: theme.chartScatterBorder,
+          borderWidth: 1,
+          titleColor: theme.chartAxis,
+          bodyColor: theme.chartAxis,
           callbacks: {
             label(context) {
               const point = context.raw;
@@ -575,13 +717,15 @@ function renderCharts(week, standings, weekName) {
       },
       scales: {
         x: {
-          title: { display: true, text: 'Best Bet Line' },
-          grid: { color: 'rgba(148, 163, 184, 0.2)' },
+          title: { display: true, text: 'Best Bet Line', color: theme.chartAxis },
+          grid: { color: theme.chartGrid },
+          ticks: { color: theme.chartTick },
         },
         y: {
-          title: { display: true, text: 'Weekly Score' },
+          title: { display: true, text: 'Weekly Score', color: theme.chartAxis },
           beginAtZero: true,
-          grid: { color: 'rgba(148, 163, 184, 0.2)' },
+          grid: { color: theme.chartGrid },
+          ticks: { color: theme.chartTick },
         },
       },
     },
@@ -595,7 +739,7 @@ function renderCharts(week, standings, weekName) {
         {
           label: 'Average Score',
           data: barData.averages,
-          backgroundColor: 'rgba(34, 211, 238, 0.65)',
+          backgroundColor: theme.chartBarFill,
           borderRadius: 10,
         },
       ],
@@ -609,12 +753,14 @@ function renderCharts(week, standings, weekName) {
       scales: {
         y: {
           beginAtZero: true,
-          title: { display: true, text: 'Average Weekly Score' },
-          grid: { color: 'rgba(148, 163, 184, 0.2)' },
+          title: { display: true, text: 'Average Weekly Score', color: theme.chartAxis },
+          grid: { color: theme.chartGrid },
+          ticks: { color: theme.chartTick },
         },
         x: {
-          title: { display: true, text: 'Absolute Line (rounded)' },
+          title: { display: true, text: 'Absolute Line (rounded)', color: theme.chartAxis },
           grid: { display: false },
+          ticks: { color: theme.chartTick },
         },
       },
     },
@@ -690,6 +836,25 @@ async function init() {
   const initialWeek = weekSelect?.value || defaultWeekName;
   if (initialWeek) {
     updateWeek(initialWeek);
+  }
+
+  const refreshForTheme = () => {
+    if (!dataset) return;
+    const activeWeek = weekSelect?.value || defaultWeekName;
+    if (activeWeek) {
+      updateWeek(activeWeek);
+    }
+  };
+
+  const themeMedia = typeof window.matchMedia === 'function'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null;
+  if (themeMedia) {
+    if (typeof themeMedia.addEventListener === 'function') {
+      themeMedia.addEventListener('change', refreshForTheme);
+    } else if (typeof themeMedia.addListener === 'function') {
+      themeMedia.addListener(refreshForTheme);
+    }
   }
 }
 
