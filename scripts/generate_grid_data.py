@@ -20,38 +20,58 @@ def serialise_datetime(value: Any) -> Optional[str]:
     return str(value)
 
 
+SCHEDULE_COLUMN_GROUPS = ((9, 10, 11), (13, 14, 15))
+
+
+def normalise_schedule_line(value: Any) -> Any:
+    if isinstance(value, (int, float)):
+        return float(value)
+    return value
+
+
 def parse_schedule_rows(rows: List[tuple], header_index: int) -> List[Dict[str, Any]]:
     schedule: List[Dict[str, Any]] = []
-    current: Dict[str, Any] = {}
+    current_rows: List[Dict[str, Any]] = [{} for _ in SCHEDULE_COLUMN_GROUPS]
+
     for row in rows[:header_index]:
-        # only inspect rows with data in the last three columns – this is where
-        # the workbook keeps the matchup metadata for the week.
-        trimmed = row[-3:]
-        if not any(cell is not None for cell in trimmed):
-            continue
-        date_or_time, team, line = trimmed
-        if team is None and line is None:
-            continue
-        if not current:
-            current = {
-                "team": serialise_datetime(team) if team is not None else "",
-                "line": line,
-                "date": serialise_datetime(date_or_time),
-            }
-        else:
-            # Treat the second populated row as the opponent/kickoff details.
-            current.update(
-                {
-                    "opponent": serialise_datetime(team) if team is not None else "",
-                    "time": serialise_datetime(date_or_time),
-                    "opponent_line": line,
-                }
-            )
-            schedule.append(current)
-            current = {}
-    if current:
-        schedule.append(current)
-    return schedule
+        for idx, columns in enumerate(SCHEDULE_COLUMN_GROUPS):
+            cells = [row[col] if col < len(row) else None for col in columns]
+            if not any(cell is not None for cell in cells):
+                continue
+
+            date_or_time, team, line = cells
+            if team is None and line is None and date_or_time is None:
+                continue
+
+            entry = current_rows[idx]
+            if not entry:
+                entry.update(
+                    {
+                        "team": serialise_datetime(team) if team is not None else "",
+                        "line": normalise_schedule_line(line),
+                        "date": serialise_datetime(date_or_time),
+                    }
+                )
+            else:
+                entry.update(
+                    {
+                        "opponent": serialise_datetime(team) if team is not None else "",
+                        "time": serialise_datetime(date_or_time),
+                        "opponent_line": normalise_schedule_line(line),
+                    }
+                )
+                schedule.append(entry.copy())
+                current_rows[idx] = {}
+
+    for entry in current_rows:
+        if entry:
+            schedule.append(entry.copy())
+
+    return [
+        item
+        for item in schedule
+        if any(value not in (None, "") for value in item.values())
+    ]
 
 
 def detect_header_row(rows: List[tuple]) -> Optional[int]:
