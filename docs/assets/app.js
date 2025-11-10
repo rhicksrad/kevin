@@ -18,6 +18,44 @@ let barChart;
 const fmtNumber = (value, digits = 0) =>
   typeof value === 'number' ? value.toFixed(digits) : value;
 
+const FRACTION_VALUES = {
+  '¼': 0.25,
+  '½': 0.5,
+  '¾': 0.75,
+  '⅛': 0.125,
+  '⅜': 0.375,
+  '⅝': 0.625,
+  '⅞': 0.875,
+};
+
+function normaliseLineValue(line) {
+  if (typeof line === 'number' && Number.isFinite(line)) {
+    return line;
+  }
+  if (typeof line !== 'string') return null;
+
+  const trimmed = line.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!trimmed) return null;
+
+  const normalised = trimmed.replace(/[\u2212\u2013\u2014]/g, '-');
+  const fractionMatch = normalised.match(/[¼½¾⅛⅜⅝⅞]$/u);
+  const fractionValue = fractionMatch ? FRACTION_VALUES[fractionMatch[0]] : 0;
+
+  let numeric = Number.parseFloat(normalised);
+  if (Number.isNaN(numeric)) {
+    if (!fractionMatch) return null;
+    numeric = 0;
+  }
+
+  if (fractionValue) {
+    const sign = normalised.startsWith('-') ? -1 : 1;
+    numeric += sign * fractionValue;
+  }
+
+  if (!Number.isFinite(numeric)) return null;
+  return Number.parseFloat(numeric.toFixed(3));
+}
+
 function buildOption(weekName) {
   const option = document.createElement('option');
   option.value = weekName;
@@ -26,10 +64,12 @@ function buildOption(weekName) {
 }
 
 function formatLine(line) {
-  if (line === null || line === undefined || line === '') return '—';
-  if (typeof line === 'number') {
-    return line > 0 ? `+${line}` : line.toString();
+  const numeric = normaliseLineValue(line);
+  if (typeof numeric === 'number' && Number.isFinite(numeric)) {
+    const display = numeric.toFixed(3).replace(/\.?0+$/, '');
+    return numeric > 0 ? `+${display}` : display;
   }
+  if (line === null || line === undefined || line === '') return '—';
   return line;
 }
 
@@ -75,7 +115,7 @@ function renderSummary(players, standingsForWeek) {
     typeof standingsForWeek.get(player.name) === 'number'
   );
   const playersWithLines = players.filter(
-    (player) => player.best_bet && typeof player.best_bet.line === 'number'
+    (player) => normaliseLineValue(player.best_bet?.line) !== null
   );
   const avgScore =
     scoredPlayers.reduce((acc, player) => acc + standingsForWeek.get(player.name), 0) /
@@ -172,12 +212,14 @@ function renderHeatmap(week, standings, weekName) {
 
   const entries = [];
   for (const player of week.players || []) {
-    const line = player.best_bet?.line;
+    const originalLine = player.best_bet?.line;
+    const line = normaliseLineValue(originalLine);
     const score = standings[player.name]?.[weekName];
-    if (typeof line !== 'number' || typeof score !== 'number') continue;
+    if (typeof line !== 'number' || !Number.isFinite(line) || typeof score !== 'number') continue;
     entries.push({
       player: player.name,
       line,
+      originalLine,
       score,
     });
   }
@@ -245,8 +287,10 @@ function renderHeatmap(week, standings, weekName) {
         }
         cell.textContent = fmtNumber(match.score, 0);
         cell.setAttribute('data-score', match.score);
-        cell.setAttribute('data-line', formatLine(match.line));
-        cell.title = `${player} best bet ${formatLine(match.line)} → score ${fmtNumber(
+        cell.setAttribute('data-line', formatLine(match.originalLine ?? match.line));
+        cell.title = `${player} best bet ${formatLine(
+          match.originalLine ?? match.line
+        )} → score ${fmtNumber(
           match.score,
           0
         )}`;
@@ -263,12 +307,13 @@ function renderHeatmap(week, standings, weekName) {
 
 function prepareScatterData(week, standings, weekName) {
   const points = [];
-  for (const player of week.players) {
-    if (!player.best_bet || typeof player.best_bet.line !== 'number') continue;
+  for (const player of week.players || []) {
+    const lineValue = normaliseLineValue(player.best_bet?.line);
+    if (!player.best_bet || typeof lineValue !== 'number' || !Number.isFinite(lineValue)) continue;
     const score = standings[player.name]?.[weekName];
     if (typeof score !== 'number') continue;
     points.push({
-      x: player.best_bet.line,
+      x: lineValue,
       y: score,
       label: player.name,
     });
