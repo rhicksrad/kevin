@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grid Insights Dashboard</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" defer></script>
+    <script src="assets/app.js" type="module" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <h1>Grid Insights</h1>
+        <p>
+          Explore the weekly selections, betting lines, and scoring performance
+          from the 2025 grid. Pick a week to reveal the schedule, compare
+          players, and visualize how confidence picks and best bets relate to
+          scoreboard success.
+        </p>
+        <div class="hero__meta">
+          <label for="week-select">Week</label>
+          <select id="week-select" aria-label="Select week"></select>
+          <span id="generated-at" class="hero__timestamp"></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel" aria-labelledby="schedule-heading">
+        <div class="panel__header">
+          <h2 id="schedule-heading">Matchups &amp; Lines</h2>
+          <p class="panel__subtitle">
+            Kickoff details captured directly from the grid workbook.
+          </p>
+        </div>
+        <div class="table-wrapper">
+          <table id="schedule-table">
+            <thead>
+              <tr>
+                <th scope="col">Team</th>
+                <th scope="col">Opponent</th>
+                <th scope="col">Line</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p id="schedule-empty" class="empty-state" hidden>
+            This week does not yet include matchup information.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="players-heading">
+        <div class="panel__header">
+          <h2 id="players-heading">Player Cards</h2>
+          <p class="panel__subtitle">
+            Cross reference confidence picks, best bets, and the official weekly
+            scores from the standings sheet.
+          </p>
+        </div>
+        <div id="player-summary" class="summary-grid"></div>
+        <div class="table-wrapper">
+          <table id="players-table">
+            <thead>
+              <tr>
+                <th scope="col">Player</th>
+                <th scope="col">Weekly Score</th>
+                <th scope="col">Best Bet</th>
+                <th scope="col">Confidence Picks</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p id="players-empty" class="empty-state" hidden>
+            No selections have been logged for this week yet.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel panel--wide" aria-labelledby="charts-heading">
+        <div class="panel__header">
+          <h2 id="charts-heading">Lines vs. Scores</h2>
+          <p class="panel__subtitle">
+            Visualize how aggressive lines interact with weekly scoring
+            performance. Hover over a point to see the contributing player.
+          </p>
+        </div>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <h3>Best Bet Line Impact</h3>
+            <canvas id="scatter-chart" aria-label="Scatter chart of lines vs scores"></canvas>
+            <figcaption>
+              Each dot represents a player’s best bet line for the selected week
+              plotted against their official weekly score.
+            </figcaption>
+          </figure>
+          <figure class="chart-card">
+            <h3>Average Score by Line Strength</h3>
+            <canvas id="bar-chart" aria-label="Bar chart of average scores by line bucket"></canvas>
+            <figcaption>
+              Lines are grouped by absolute value (rounded). Taller bars indicate
+              higher scoring results for that bucket.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Data source: <code>2025 Grid.xlsm</code>. The JSON export powering this
+        dashboard lives at
+        <a href="assets/grid-data.json" download>assets/grid-data.json</a>.
+      </p>
+    </footer>
+  </body>
+</html>
