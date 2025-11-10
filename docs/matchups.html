@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Grid Insights Dashboard</title>
+    <title>Matchups &amp; Lines · Grid Insights</title>
     <link rel="stylesheet" href="assets/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,48 +18,50 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="site-nav__brand" href="index.html">Grid Insights</a>
         <ul class="site-nav__links">
-          <li><a href="index.html" aria-current="page">Leaderboard</a></li>
-          <li><a href="matchups.html">Matchups &amp; Lines</a></li>
+          <li><a href="index.html">Leaderboard</a></li>
+          <li><a href="matchups.html" aria-current="page">Matchups &amp; Lines</a></li>
           <li><a href="players.html">Player Insights</a></li>
           <li><a href="lines-grid.html">Lines &amp; Scores Grid</a></li>
         </ul>
       </nav>
       <div class="hero__content">
-        <h1>Season Leaderboard</h1>
+        <h1>Weekly Matchups &amp; Lines</h1>
         <p>
-          Track every player’s official score as the season unfolds. The
-          leaderboard tallies every recorded week, exposing the consistency and
-          hot streaks that separate contenders from the pack.
+          Dive into the betting landscape for the selected week. Compare point
+          spreads, kickoff times, and opponents straight from the official grid
+          workbook.
         </p>
         <div class="hero__meta">
+          <label for="week-select">Week</label>
+          <select id="week-select" aria-label="Select week"></select>
           <span id="generated-at" class="hero__timestamp"></span>
         </div>
       </div>
     </header>
 
     <main class="layout">
-      <section class="panel panel--wide" aria-labelledby="leaderboard-heading">
+      <section class="panel" aria-labelledby="schedule-heading">
         <div class="panel__header">
-          <h2 id="leaderboard-heading">Season Leaderboard</h2>
+          <h2 id="schedule-heading">Matchups &amp; Lines</h2>
           <p class="panel__subtitle">
-            Combined official scores for every week played, ranked highest to lowest.
+            Kickoff details captured directly from the grid workbook.
           </p>
         </div>
         <div class="table-wrapper">
-          <table id="leaderboard-table">
+          <table id="schedule-table">
             <thead>
               <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Player</th>
-                <th scope="col">Total Score</th>
-                <th scope="col">Weeks Played</th>
-                <th scope="col">Average</th>
+                <th scope="col">Team</th>
+                <th scope="col">Opponent</th>
+                <th scope="col">Line</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
-          <p id="leaderboard-empty" class="empty-state" hidden>
-            No leaderboard data is available yet.
+          <p id="schedule-empty" class="empty-state" hidden>
+            This week does not yet include matchup information.
           </p>
         </div>
       </section>
