@@ -5,6 +5,11 @@ const scheduleEmptyState = document.querySelector('#schedule-empty');
 const playersTableBody = document.querySelector('#players-table tbody');
 const playersEmptyState = document.querySelector('#players-empty');
 const summaryContainer = document.querySelector('#player-summary');
+const heatmapTableHead = document.querySelector('#heatmap-table thead');
+const heatmapTableBody = document.querySelector('#heatmap-table tbody');
+const heatmapEmptyState = document.querySelector('#heatmap-empty');
+const heatmapLegend = document.querySelector('#heatmap-legend .heatmap-legend__gradient');
+const heatmapPanel = document.querySelector('#heatmap-panel');
 
 let dataset;
 let scatterChart;
@@ -144,6 +149,115 @@ function renderPlayers(week, standings, weekName) {
       row.appendChild(cell);
     });
     playersTableBody.appendChild(row);
+  }
+}
+
+function computeHeatmapColor(score, minScore, maxScore) {
+  if (!Number.isFinite(score)) return null;
+  const range = maxScore - minScore;
+  const ratio = range === 0 ? 0.5 : (score - minScore) / range;
+  const hue = 10 + ratio * 120; // red to green range
+  const lightness = 55;
+  return {
+    background: `hsl(${hue}, 78%, ${lightness}%)`,
+    text: ratio < 0.35 ? '#f8fafc' : '#0f172a',
+  };
+}
+
+function renderHeatmap(week, standings, weekName) {
+  heatmapTableHead.innerHTML = '';
+  heatmapTableBody.innerHTML = '';
+
+  if (!heatmapPanel) return;
+
+  const entries = [];
+  for (const player of week.players || []) {
+    const line = player.best_bet?.line;
+    const score = standings[player.name]?.[weekName];
+    if (typeof line !== 'number' || typeof score !== 'number') continue;
+    entries.push({
+      player: player.name,
+      line,
+      score,
+    });
+  }
+
+  if (entries.length === 0) {
+    heatmapEmptyState.hidden = false;
+    heatmapPanel.setAttribute('data-empty', 'true');
+    if (heatmapLegend) {
+      heatmapLegend.style.background = '';
+    }
+    return;
+  }
+
+  heatmapEmptyState.hidden = true;
+  heatmapPanel.removeAttribute('data-empty');
+
+  const uniqueLines = Array.from(new Set(entries.map((entry) => entry.line))).sort(
+    (a, b) => a - b
+  );
+
+  const headerRow = document.createElement('tr');
+  const playerHeader = document.createElement('th');
+  playerHeader.scope = 'col';
+  playerHeader.textContent = 'Player';
+  headerRow.appendChild(playerHeader);
+  for (const line of uniqueLines) {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = formatLine(line);
+    headerRow.appendChild(th);
+  }
+  heatmapTableHead.appendChild(headerRow);
+
+  const players = Array.from(new Set(entries.map((entry) => entry.player))).sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  const minScore = Math.min(...entries.map((entry) => entry.score));
+  const maxScore = Math.max(...entries.map((entry) => entry.score));
+
+  if (heatmapLegend) {
+    const lowColor = computeHeatmapColor(minScore, minScore, maxScore)?.background || '#fee2e2';
+    const highColor = computeHeatmapColor(maxScore, minScore, maxScore)?.background || '#bbf7d0';
+    heatmapLegend.style.background = `linear-gradient(90deg, ${lowColor}, ${highColor})`;
+  }
+
+  for (const player of players) {
+    const row = document.createElement('tr');
+    const nameCell = document.createElement('th');
+    nameCell.scope = 'row';
+    nameCell.textContent = player;
+    row.appendChild(nameCell);
+
+    for (const line of uniqueLines) {
+      const cell = document.createElement('td');
+      const match = entries.find(
+        (entry) => entry.player === player && entry.line === line
+      );
+      if (match) {
+        const color = computeHeatmapColor(match.score, minScore, maxScore);
+        if (color) {
+          cell.style.setProperty('--heatmap-color', color.background);
+          cell.style.background = color.background;
+          cell.style.color = color.text;
+        }
+        cell.textContent = fmtNumber(match.score, 0);
+        cell.setAttribute('data-score', match.score);
+        cell.setAttribute('data-line', formatLine(match.line));
+        cell.title = `${player} best bet ${formatLine(match.line)} → score ${fmtNumber(
+          match.score,
+          0
+        )}`;
+      } else {
+        cell.textContent = '—';
+        cell.classList.add('heatmap-cell--empty');
+      }
+      row.appendChild(cell);
+    }
+
+    heatmapTableBody.appendChild(row);
   }
 }
 
@@ -290,6 +404,7 @@ function updateWeek(weekName) {
   renderSchedule(week.schedule);
   renderPlayers(week, dataset.standings, weekName);
   renderCharts(week, dataset.standings, weekName);
+  renderHeatmap(week, dataset.standings, weekName);
 }
 
 async function init() {
