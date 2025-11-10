@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team Insights · Grid Insights</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="assets/app.js" type="module" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="site-nav__brand" href="index.html">Grid Insights</a>
+        <ul class="site-nav__links">
+          <li><a href="index.html">Leaderboard</a></li>
+          <li><a href="matchups.html">Matchups &amp; Lines</a></li>
+          <li><a href="players.html">Player Insights</a></li>
+          <li><a href="teams.html" aria-current="page">Team Insights</a></li>
+          <li><a href="lines-grid.html">Lines &amp; Scores Grid</a></li>
+        </ul>
+      </nav>
+      <div class="hero__content">
+        <h1>Team Betting Insights</h1>
+        <p>
+          Discover which programs the grid community leans on most and which
+          ones return the biggest point hauls. Filter by week or scan the entire
+          season to uncover where the betting confidence really lies.
+        </p>
+        <div class="hero__meta">
+          <label for="team-week-select">Week</label>
+          <select id="team-week-select" aria-label="Filter team stats by week"></select>
+          <span id="generated-at" class="hero__timestamp"></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel" aria-labelledby="team-summary-heading">
+        <div class="panel__header">
+          <h2 id="team-summary-heading">Season Snapshot</h2>
+          <p class="panel__subtitle">
+            Top-level metrics for the currently selected range. Counts include
+            all confidence picks recorded in the grid workbook.
+          </p>
+        </div>
+        <div id="team-summary" class="summary-grid"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="team-bets-heading">
+        <div class="panel__header">
+          <h2 id="team-bets-heading">Most Picked Teams</h2>
+          <p class="panel__subtitle">
+            Teams ranked by how often they appear in player confidence sheets.
+            Tie breakers favour higher total point production.
+          </p>
+        </div>
+        <div class="table-wrapper">
+          <table id="team-bets-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Team</th>
+                <th scope="col">Times Picked</th>
+                <th scope="col">Weeks Appearing</th>
+                <th scope="col">Total Points</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p id="team-bets-empty" class="empty-state" hidden>
+            No team selections are available for this range yet.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="team-points-heading">
+        <div class="panel__header">
+          <h2 id="team-points-heading">Top Point-Earning Teams</h2>
+          <p class="panel__subtitle">
+            Teams ordered by the total points they have delivered to confidence
+            pickers. Tie breakers favour consistency across weeks.
+          </p>
+        </div>
+        <div class="table-wrapper">
+          <table id="team-points-table">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Team</th>
+                <th scope="col">Total Points</th>
+                <th scope="col">Weeks Appearing</th>
+                <th scope="col">Times Picked</th>
+                <th scope="col">Average Points</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p id="team-points-empty" class="empty-state" hidden>
+            No team selections are available for this range yet.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Data source: <code>2025 Grid.xlsm</code>. The JSON export powering this
+        dashboard lives at
+        <a href="assets/grid-data.json" download>assets/grid-data.json</a>.
+      </p>
+    </footer>
+  </body>
+</html>
