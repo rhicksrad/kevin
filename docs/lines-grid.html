@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Grid Insights Dashboard</title>
+    <title>Lines &amp; Scores Grid · Grid Insights</title>
     <link rel="stylesheet" href="assets/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,49 +18,49 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a class="site-nav__brand" href="index.html">Grid Insights</a>
         <ul class="site-nav__links">
-          <li><a href="index.html" aria-current="page">Leaderboard</a></li>
+          <li><a href="index.html">Leaderboard</a></li>
           <li><a href="matchups.html">Matchups &amp; Lines</a></li>
           <li><a href="players.html">Player Insights</a></li>
-          <li><a href="lines-grid.html">Lines &amp; Scores Grid</a></li>
+          <li><a href="lines-grid.html" aria-current="page">Lines &amp; Scores Grid</a></li>
         </ul>
       </nav>
       <div class="hero__content">
-        <h1>Season Leaderboard</h1>
+        <h1>Lines &amp; Scores Grid</h1>
         <p>
-          Track every player’s official score as the season unfolds. The
-          leaderboard tallies every recorded week, exposing the consistency and
-          hot streaks that separate contenders from the pack.
+          Compare every player’s best bet line to their official score. The heatmap
+          highlights the high and low performers for each spread value.
         </p>
         <div class="hero__meta">
+          <label for="week-select">Week</label>
+          <select id="week-select" aria-label="Select week"></select>
           <span id="generated-at" class="hero__timestamp"></span>
         </div>
       </div>
     </header>
 
     <main class="layout">
-      <section class="panel panel--wide" aria-labelledby="leaderboard-heading">
+      <section class="panel panel--wide" aria-labelledby="heatmap-heading" id="heatmap-panel">
         <div class="panel__header">
-          <h2 id="leaderboard-heading">Season Leaderboard</h2>
+          <h2 id="heatmap-heading">Lines &amp; Scores Grid</h2>
           <p class="panel__subtitle">
-            Combined official scores for every week played, ranked highest to lowest.
+            Compare every player's best bet line with their official weekly score.
+            Cells are color coded so you can instantly spot hot and cold
+            performances for each line.
           </p>
         </div>
-        <div class="table-wrapper">
-          <table id="leaderboard-table">
-            <thead>
-              <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Player</th>
-                <th scope="col">Total Score</th>
-                <th scope="col">Weeks Played</th>
-                <th scope="col">Average</th>
-              </tr>
-            </thead>
+        <div class="table-wrapper table-wrapper--heatmap">
+          <table id="heatmap-table" aria-describedby="heatmap-legend">
+            <thead></thead>
             <tbody></tbody>
           </table>
-          <p id="leaderboard-empty" class="empty-state" hidden>
-            No leaderboard data is available yet.
+          <p id="heatmap-empty" class="empty-state" hidden>
+            No best bet lines with official scores are available for this week.
           </p>
+        </div>
+        <div class="heatmap-legend" id="heatmap-legend" aria-hidden="true">
+          <span>Lower score</span>
+          <div class="heatmap-legend__gradient"></div>
+          <span>Higher score</span>
         </div>
       </section>
     </main>

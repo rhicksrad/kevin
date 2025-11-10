@@ -142,6 +142,8 @@ function formatLine(line) {
 }
 
 function renderSchedule(schedule) {
+  if (!scheduleTableBody || !scheduleEmptyState) return;
+
   scheduleTableBody.innerHTML = '';
   if (!schedule || schedule.length === 0) {
     scheduleEmptyState.hidden = false;
@@ -175,6 +177,8 @@ function renderSchedule(schedule) {
 }
 
 function renderSummary(players, standingsForWeek) {
+  if (!summaryContainer) return;
+
   summaryContainer.innerHTML = '';
   if (!players.length) return;
 
@@ -209,10 +213,14 @@ function renderSummary(players, standingsForWeek) {
 }
 
 function renderPlayers(week, standings, weekName) {
+  if (!playersTableBody || !playersEmptyState) return;
+
   playersTableBody.innerHTML = '';
   if (!week.players || week.players.length === 0) {
     playersEmptyState.hidden = false;
-    summaryContainer.innerHTML = '';
+    if (summaryContainer) {
+      summaryContainer.innerHTML = '';
+    }
     return;
   }
   playersEmptyState.hidden = true;
@@ -273,10 +281,11 @@ function computeHeatmapColor(score, minScore, maxScore) {
 }
 
 function renderHeatmap(week, standings, weekName) {
+  if (!heatmapTableHead || !heatmapTableBody || !heatmapEmptyState || !heatmapPanel)
+    return;
+
   heatmapTableHead.innerHTML = '';
   heatmapTableBody.innerHTML = '';
-
-  if (!heatmapPanel) return;
 
   const entries = [];
   for (const player of week.players || []) {
@@ -406,11 +415,23 @@ function prepareBarData(scatterPoints) {
 }
 
 function renderCharts(week, standings, weekName) {
-  const scatterData = prepareScatterData(week, standings, weekName);
-  const barData = prepareBarData(scatterData);
-
   const scatterCtx = document.querySelector('#scatter-chart');
   const barCtx = document.querySelector('#bar-chart');
+
+  if (!scatterCtx || !barCtx || typeof Chart === 'undefined') {
+    if (scatterChart) {
+      scatterChart.destroy();
+      scatterChart = null;
+    }
+    if (barChart) {
+      barChart.destroy();
+      barChart = null;
+    }
+    return;
+  }
+
+  const scatterData = prepareScatterData(week, standings, weekName);
+  const barData = prepareBarData(scatterData);
 
   if (scatterChart) scatterChart.destroy();
   if (barChart) barChart.destroy();
@@ -492,25 +513,31 @@ function renderCharts(week, standings, weekName) {
   });
 
   const scatterCard = scatterCtx.closest('.chart-card');
-  if (scatterData.length === 0) {
-    scatterCard.classList.add('chart-card--empty');
-    scatterCard.setAttribute('data-empty', 'No best bet lines with scores to show.');
-  } else {
-    scatterCard.classList.remove('chart-card--empty');
-    scatterCard.removeAttribute('data-empty');
+  if (scatterCard) {
+    if (scatterData.length === 0) {
+      scatterCard.classList.add('chart-card--empty');
+      scatterCard.setAttribute('data-empty', 'No best bet lines with scores to show.');
+    } else {
+      scatterCard.classList.remove('chart-card--empty');
+      scatterCard.removeAttribute('data-empty');
+    }
   }
 
   const barCard = barCtx.closest('.chart-card');
-  if (barData.labels.length === 0) {
-    barCard.classList.add('chart-card--empty');
-    barCard.setAttribute('data-empty', 'No line buckets available.');
-  } else {
-    barCard.classList.remove('chart-card--empty');
-    barCard.removeAttribute('data-empty');
+  if (barCard) {
+    if (barData.labels.length === 0) {
+      barCard.classList.add('chart-card--empty');
+      barCard.setAttribute('data-empty', 'No line buckets available.');
+    } else {
+      barCard.classList.remove('chart-card--empty');
+      barCard.removeAttribute('data-empty');
+    }
   }
 }
 
 function updateWeek(weekName) {
+  if (!dataset || !dataset.weeks) return;
+
   const week = dataset.weeks.find((entry) => entry.name === weekName);
   if (!week) return;
 
@@ -524,35 +551,52 @@ async function init() {
   const response = await fetch('assets/grid-data.json');
   dataset = await response.json();
 
-  if (dataset.generatedAt) {
+  if (dataset.generatedAt && generatedAtEl) {
     const generated = new Date(dataset.generatedAt);
     generatedAtEl.textContent = `Data refreshed ${generated.toLocaleString()}`;
   }
 
   renderLeaderboard(dataset.standings);
 
-  dataset.weeks
-    .filter((week) => week.players.length || week.schedule.length)
-    .forEach((week, index) => {
+  const availableWeeks = Array.isArray(dataset.weeks)
+    ? dataset.weeks.filter((week) => (week.players?.length || week.schedule?.length))
+    : [];
+  const defaultWeekName =
+    availableWeeks[0]?.name || dataset.weeks?.[0]?.name || null;
+
+  if (weekSelect && Array.isArray(dataset.weeks)) {
+    availableWeeks.forEach((week, index) => {
       const option = buildOption(week.name);
       if (index === 0) option.selected = true;
       weekSelect.appendChild(option);
     });
 
-  if (!weekSelect.value && dataset.weeks.length) {
-    weekSelect.appendChild(buildOption(dataset.weeks[0].name));
-    weekSelect.value = dataset.weeks[0].name;
+    if (!weekSelect.value && defaultWeekName) {
+      weekSelect.appendChild(buildOption(defaultWeekName));
+      weekSelect.value = defaultWeekName;
+    }
+
+    weekSelect.addEventListener('change', (event) => updateWeek(event.target.value));
   }
 
-  weekSelect.addEventListener('change', (event) => updateWeek(event.target.value));
-
-  if (weekSelect.value) {
-    updateWeek(weekSelect.value);
+  const initialWeek = weekSelect?.value || defaultWeekName;
+  if (initialWeek) {
+    updateWeek(initialWeek);
   }
 }
 
 init().catch((error) => {
   console.error('Unable to initialise dashboard', error);
-  scheduleEmptyState.hidden = false;
-  scheduleEmptyState.textContent = 'Failed to load grid data.';
+  if (scheduleEmptyState) {
+    scheduleEmptyState.hidden = false;
+    scheduleEmptyState.textContent = 'Failed to load grid data.';
+  }
+  if (playersEmptyState) {
+    playersEmptyState.hidden = false;
+    playersEmptyState.textContent = 'Failed to load grid data.';
+  }
+  if (leaderboardEmptyState) {
+    leaderboardEmptyState.hidden = false;
+    leaderboardEmptyState.textContent = 'Failed to load grid data.';
+  }
 });
