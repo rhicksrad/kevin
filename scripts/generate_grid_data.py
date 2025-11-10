@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import UTC, datetime, time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -20,7 +21,15 @@ def serialise_datetime(value: Any) -> Optional[str]:
     return str(value)
 
 
-SCHEDULE_COLUMN_GROUPS = ((9, 10, 11), (13, 14, 15))
+SCHEDULE_START_COLUMN = 8
+SCHEDULE_GROUP_WIDTH = 3
+SCHEDULE_HEADER_TOKENS = {
+    "rk",
+    "team",
+    "teams",
+    "time",
+    "circa",
+}
 
 
 def normalise_schedule_line(value: Any) -> Any:
@@ -29,29 +38,101 @@ def normalise_schedule_line(value: Any) -> Any:
     return value
 
 
+def _looks_like_schedule_start(date_or_time: Any, team: Any, line: Any) -> bool:
+    if isinstance(team, str) and team.strip().lower() in SCHEDULE_HEADER_TOKENS:
+        return False
+
+    if isinstance(line, str) and line.strip().lower() in SCHEDULE_HEADER_TOKENS:
+        return False
+
+    if isinstance(date_or_time, (datetime, time)):
+        return True
+
+    if isinstance(date_or_time, str):
+        stripped = date_or_time.strip()
+        if stripped:
+            lowered = stripped.lower()
+            if re.search(r"\b\d{1,2}(:\d{2})?\s*(am|pm)\b", lowered):
+                return True
+            if re.fullmatch(r"\d{1,2}:\d{2}", stripped):
+                return True
+            if re.search(r"\b(?:mon|tue|wed|thu|fri|sat|sun)\b", lowered):
+                return True
+            if re.search(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b", lowered):
+                return True
+            if re.search(r"\d{4}-\d{2}-\d{2}", stripped):
+                return True
+            if re.search(r"\d{1,2}/\d{1,2}", stripped):
+                return True
+
+    if isinstance(team, str) and team.strip() and line not in (None, ""):
+        return True
+
+    return False
+
+
+def _should_ignore_schedule_cells(date_or_time: Any, team: Any, line: Any) -> bool:
+    if date_or_time is None and team is None and line is None:
+        return True
+
+    if isinstance(team, str) and team.strip().lower() in SCHEDULE_HEADER_TOKENS:
+        return True
+
+    if isinstance(line, str) and line.strip().lower() in SCHEDULE_HEADER_TOKENS:
+        return True
+
+    if date_or_time is not None and not _looks_like_schedule_start(date_or_time, team, line):
+        return True
+
+    return False
+
+
 def parse_schedule_rows(rows: List[tuple], header_index: int) -> List[Dict[str, Any]]:
     schedule: List[Dict[str, Any]] = []
-    current_rows: List[Dict[str, Any]] = [{} for _ in SCHEDULE_COLUMN_GROUPS]
+    column_starts: List[int] = []
+    for row in rows[:header_index]:
+        row_starts: List[int] = []
+        row_length = len(row)
+        for col in range(row_length):
+            cells = [
+                row[col + offset] if col + offset < row_length else None
+                for offset in range(SCHEDULE_GROUP_WIDTH)
+            ]
+            if _looks_like_schedule_start(*cells):
+                row_starts.append(col)
+        if row_starts:
+            column_starts = row_starts
+            break
+
+    if not column_starts:
+        column_starts = [SCHEDULE_START_COLUMN]
+
+    # ensure deterministic ordering and no duplicates
+    column_starts = sorted(dict.fromkeys(column_starts))
+
+    current_rows: Dict[int, Dict[str, Any]] = {start: {} for start in column_starts}
 
     for row in rows[:header_index]:
-        for idx, columns in enumerate(SCHEDULE_COLUMN_GROUPS):
-            cells = [row[col] if col < len(row) else None for col in columns]
+        for start in column_starts:
+            cells = [
+                row[start + offset] if start + offset < len(row) else None
+                for offset in range(SCHEDULE_GROUP_WIDTH)
+            ]
             if not any(cell is not None for cell in cells):
                 continue
 
             date_or_time, team, line = cells
-            if team is None and line is None and date_or_time is None:
-                continue
+            entry = current_rows[start]
 
-            entry = current_rows[idx]
             if not entry:
-                entry.update(
-                    {
-                        "team": serialise_datetime(team) if team is not None else "",
-                        "line": normalise_schedule_line(line),
-                        "date": serialise_datetime(date_or_time),
-                    }
-                )
+                if _should_ignore_schedule_cells(date_or_time, team, line):
+                    continue
+
+                current_rows[start] = {
+                    "team": serialise_datetime(team) if team is not None else "",
+                    "line": normalise_schedule_line(line),
+                    "date": serialise_datetime(date_or_time),
+                }
             else:
                 entry.update(
                     {
@@ -61,17 +142,27 @@ def parse_schedule_rows(rows: List[tuple], header_index: int) -> List[Dict[str, 
                     }
                 )
                 schedule.append(entry.copy())
-                current_rows[idx] = {}
+                current_rows[start] = {}
 
-    for entry in current_rows:
+    for entry in current_rows.values():
         if entry:
             schedule.append(entry.copy())
 
-    return [
-        item
-        for item in schedule
-        if any(value not in (None, "") for value in item.values())
-    ]
+    filtered: List[Dict[str, Any]] = []
+    for item in schedule:
+        team = item.get("team")
+        opponent = item.get("opponent")
+        line = item.get("line")
+        opponent_line = item.get("opponent_line")
+
+        has_team = isinstance(team, str) and team.strip() and team.strip().lower() not in SCHEDULE_HEADER_TOKENS
+        has_opponent = isinstance(opponent, str) and opponent.strip()
+        has_line = line not in (None, "") or opponent_line not in (None, "")
+
+        if has_team or has_opponent or has_line:
+            filtered.append(item)
+
+    return filtered
 
 
 def detect_header_row(rows: List[tuple]) -> Optional[int]:
