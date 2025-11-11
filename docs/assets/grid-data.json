@@ -30289,8 +30289,8 @@
             {
               "team": "Vanderbilt",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Miss State",
@@ -30305,7 +30305,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 8,
+          "total_points": 14,
           "best_bet": {
             "time": "5:00p",
             "team": "Ball State",
@@ -30318,8 +30318,8 @@
             {
               "team": "Kennesaw State",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Oregon State",
@@ -30342,11 +30342,11 @@
             {
               "team": "Texas A&M",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 0,
+          "total_points": 12,
           "best_bet": null
         },
         {
@@ -30355,14 +30355,14 @@
             {
               "team": "Ohio State",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Indiana",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "U Georgia",
@@ -30373,8 +30373,8 @@
             {
               "team": "Clemson",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Rutgers",
@@ -30383,7 +30383,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 8,
+          "total_points": 30,
           "best_bet": {
             "time": "2025-11-05T00:00:00",
             "team": "Northern Illinois",
@@ -30396,8 +30396,8 @@
             {
               "team": "Ohio State",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Notre Dame",
@@ -30408,23 +30408,23 @@
             {
               "team": "Miami, FL",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "East Carolina",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Louisville",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 28,
           "best_bet": {
             "time": "5:00p",
             "team": "Toledo",
@@ -30437,14 +30437,14 @@
             {
               "team": "Bears",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Ohio State",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Browns",
@@ -30461,11 +30461,11 @@
             {
               "team": "U Arizona",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 0,
+          "total_points": 20,
           "best_bet": null
         },
         {
@@ -30480,14 +30480,14 @@
             {
               "team": "Nebraska",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "U Arizona",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Browns",
@@ -30502,7 +30502,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 24,
           "best_bet": {
             "time": "2025-11-06T00:00:00",
             "team": "UTSA",
@@ -30515,14 +30515,14 @@
             {
               "team": "Vikings",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Bucs",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Broncos",
@@ -30543,7 +30543,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 22,
+          "total_points": 4,
           "best_bet": {
             "time": "5:30p",
             "team": "South Florida",
@@ -30556,14 +30556,14 @@
             {
               "team": "Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "U Oregon",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Texas Tech",
@@ -30584,7 +30584,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 28,
           "best_bet": null
         },
         {
@@ -30605,8 +30605,8 @@
             {
               "team": "West Virginia",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Northwestern",
@@ -30621,7 +30621,7 @@
               "awarded_points": null
             }
           ],
-          "total_points": 0,
+          "total_points": 6,
           "best_bet": {
             "time": "2025-11-06T00:00:00",
             "team": "Georgia Southern",
@@ -30634,8 +30634,8 @@
             {
               "team": "Ohio State",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Broncos",
@@ -30662,7 +30662,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 12,
+          "total_points": 22,
           "best_bet": {
             "time": "5:30p",
             "team": "Appalachian State",
@@ -30675,20 +30675,20 @@
             {
               "team": "UCLA",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Bucs",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Commanders",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Falcons",
@@ -30699,11 +30699,11 @@
             {
               "team": "U Iowa",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 26,
+          "total_points": 0,
           "best_bet": null
         },
         {
@@ -30712,14 +30712,14 @@
             {
               "team": "U Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Vanderbilt",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Colts",
@@ -30736,11 +30736,11 @@
             {
               "team": "U Iowa",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 8,
+          "total_points": 24,
           "best_bet": {
             "time": "2025-11-07T00:00:00",
             "team": "Houston",
@@ -30753,8 +30753,8 @@
             {
               "team": "U Oregon",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Oregon State",
@@ -30771,8 +30771,8 @@
             {
               "team": "Boston College",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Tulsa",
@@ -30781,7 +30781,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 16,
           "best_bet": {
             "time": "6:00p",
             "team": "Central Florida",
@@ -30812,8 +30812,8 @@
             {
               "team": "Vikings",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "MIA/BUF U",
@@ -30822,7 +30822,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 16,
+          "total_points": 12,
           "best_bet": null
         },
         {
@@ -30843,8 +30843,8 @@
             {
               "team": "Clemson",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Maryland",
@@ -30855,11 +30855,11 @@
             {
               "team": "Vanderbilt",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 0,
+          "total_points": 8,
           "best_bet": {
             "time": "2025-11-07T00:00:00",
             "team": "Tulane",
@@ -30872,8 +30872,8 @@
             {
               "team": "U Iowa",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "USF",
@@ -30896,11 +30896,11 @@
             {
               "team": "Ohio State",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 18,
+          "total_points": 10,
           "best_bet": {
             "time": "7:00p",
             "team": "Memphis",
@@ -30913,8 +30913,8 @@
             {
               "team": "Bucs",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Raiders",
@@ -30941,7 +30941,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 20,
+          "total_points": 10,
           "best_bet": null
         },
         {
@@ -30991,8 +30991,8 @@
             {
               "team": "UCLA",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Browns",
@@ -31009,8 +31009,8 @@
             {
               "team": "Texas A&M",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Tulane",
@@ -31019,7 +31019,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 4,
           "best_bet": {
             "time": "7:00p",
             "team": "USC",
@@ -31038,8 +31038,8 @@
             {
               "team": "West Virginia",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Chargers",
@@ -31056,11 +31056,11 @@
             {
               "team": "Bears",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 6,
+          "total_points": 16,
           "best_bet": null
         },
         {
@@ -31075,8 +31075,8 @@
             {
               "team": "Commanders",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "San Diego State",
@@ -31087,8 +31087,8 @@
             {
               "team": "U Iowa",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "U Conn",
@@ -31097,7 +31097,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 24,
+          "total_points": 12,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Charlotte",
@@ -31116,8 +31116,8 @@
             {
               "team": "James Madison",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Panthers",
@@ -31128,8 +31128,8 @@
             {
               "team": "North Carolina",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Browns",
@@ -31138,7 +31138,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 22,
           "best_bet": {
             "time": "1:00p",
             "team": "East Carolina",
@@ -31151,8 +31151,8 @@
             {
               "team": "U Oregon",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Rams",
@@ -31169,8 +31169,8 @@
             {
               "team": "Indiana",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Tulane",
@@ -31179,7 +31179,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 14,
+          "total_points": 28,
           "best_bet": null
         },
         {
@@ -31188,26 +31188,26 @@
             {
               "team": "Penn State",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "West Virginia",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Marshall",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "North Carolina",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Hawaii",
@@ -31216,7 +31216,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 18,
+          "total_points": 14,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Tulsa",
@@ -31235,14 +31235,14 @@
             {
               "team": "Ravens",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "West Virginia",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "JAX/HOU U",
@@ -31253,11 +31253,11 @@
             {
               "team": "Penn State",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 2,
+          "total_points": 14,
           "best_bet": {
             "time": "1:00p",
             "team": "Florida Atlantic",
@@ -31270,8 +31270,8 @@
             {
               "team": "U Arizona",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "San Diego State",
@@ -31288,17 +31288,17 @@
             {
               "team": "James Madison",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Louisville",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 2,
+          "total_points": 14,
           "best_bet": null
         },
         {
@@ -31307,8 +31307,8 @@
             {
               "team": "U Oregon",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Chargers",
@@ -31325,8 +31325,8 @@
             {
               "team": "Bears",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Colts",
@@ -31335,7 +31335,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 16,
+          "total_points": 30,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Florida",
@@ -31389,8 +31389,8 @@
             {
               "team": "Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Alabama",
@@ -31401,14 +31401,14 @@
             {
               "team": "Vanderbilt",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Kentucky",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Sam Houston",
@@ -31417,7 +31417,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 10,
+          "total_points": 30,
           "best_bet": null
         },
         {
@@ -31479,8 +31479,8 @@
             {
               "team": "Indiana",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "U Conn",
@@ -31491,11 +31491,11 @@
             {
               "team": "U Arizona",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 14,
+          "total_points": 22,
           "best_bet": {
             "time": "10:00a",
             "team": "Army",
@@ -31526,8 +31526,8 @@
             {
               "team": "Saints",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Eagles",
@@ -31536,7 +31536,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 20,
+          "total_points": 24,
           "best_bet": null
         },
         {
@@ -31545,8 +31545,8 @@
             {
               "team": "Vanderbilt",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Seahawks",
@@ -31557,23 +31557,23 @@
             {
               "team": "U Oregon",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Indiana",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "West Virginia",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 8,
+          "total_points": 30,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "James Madison",
@@ -31598,20 +31598,20 @@
             {
               "team": "U Oregon",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "BYU",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Penn State",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
           "total_points": 6,
@@ -31633,8 +31633,8 @@
             {
               "team": "Bucs",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Oregon State",
@@ -31655,7 +31655,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 8,
+          "total_points": 0,
           "best_bet": null
         },
         {
@@ -31674,8 +31674,8 @@
             {
               "team": "LSU",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Tulane",
@@ -31698,11 +31698,11 @@
             {
               "team": "Navy",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 18,
+          "total_points": 6,
           "best_bet": {
             "time": "2:00p",
             "team": "Coastal Carolina",
@@ -31752,8 +31752,8 @@
             {
               "team": "Bears",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Colts",
@@ -31780,7 +31780,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 10,
+          "total_points": 20,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Colorado",
@@ -31805,23 +31805,23 @@
             {
               "team": "Missouri",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "U Iowa",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Vanderbilt",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 10,
+          "total_points": 2,
           "best_bet": {
             "time": "10:00a",
             "team": "West Virginia",
@@ -31912,8 +31912,8 @@
             {
               "team": "Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Northwestern",
@@ -31924,23 +31924,23 @@
             {
               "team": "Ohio State",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Bears",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Patriots",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 0,
+          "total_points": 22,
           "best_bet": {
             "time": "10:00a",
             "team": "Boston College",
@@ -31996,8 +31996,8 @@
             {
               "team": "Ravens",
               "points": 8,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 8
             },
             {
               "team": "Rice",
@@ -32018,7 +32018,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 8,
+          "total_points": 16,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Florida State",
@@ -32043,14 +32043,14 @@
             {
               "team": "Ravens",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Steelers",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Seahawks",
@@ -32059,7 +32059,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 6,
+          "total_points": 8,
           "best_bet": {
             "time": "5:00p",
             "team": "Clemson",
@@ -32072,8 +32072,8 @@
             {
               "team": "U Oregon",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Browns",
@@ -32090,8 +32090,8 @@
             {
               "team": "Clemson",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "App State",
@@ -32100,7 +32100,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 6,
+          "total_points": 20,
           "best_bet": null
         },
         {
@@ -32168,8 +32168,8 @@
             {
               "team": "Commanders",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Colts",
@@ -32178,7 +32178,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 14,
+          "total_points": 10,
           "best_bet": {
             "time": "5:00p",
             "team": "Louisville",
@@ -32191,26 +32191,26 @@
             {
               "team": "Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "TCU",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
-            },
-            {
-              "team": "Ohio State",
-              "points": 6,
               "result": "loss",
               "awarded_points": 0
             },
             {
+              "team": "Ohio State",
+              "points": 6,
+              "result": "win",
+              "awarded_points": 6
+            },
+            {
               "team": "Bucs",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Colts",
@@ -32219,7 +32219,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 14,
+          "total_points": 18,
           "best_bet": null
         },
         {
@@ -32240,23 +32240,23 @@
             {
               "team": "U Iowa",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Boston College",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "North Carolina",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 10,
+          "total_points": 2,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Syracuse",
@@ -32287,17 +32287,17 @@
             {
               "team": "U Florida",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "LA Tech",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 12,
+          "total_points": 6,
           "best_bet": {
             "time": "1:30p",
             "team": "Miami Florida",
@@ -32365,8 +32365,8 @@
             {
               "team": "Saints",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Northwestern",
@@ -32375,7 +32375,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 10,
+          "total_points": 14,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Stanford",
@@ -32394,8 +32394,8 @@
             {
               "team": "Colorado State",
               "points": 8,
-              "result": "win",
-              "awarded_points": 8
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Texas Tech",
@@ -32406,8 +32406,8 @@
             {
               "team": "Missouri",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "U Kansas",
@@ -32416,7 +32416,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 18,
+          "total_points": 6,
           "best_bet": {
             "time": "2:30p",
             "team": "North Carolina",
@@ -32441,8 +32441,8 @@
             {
               "team": "Patriots",
               "points": 6,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 6
             },
             {
               "team": "Eagles",
@@ -32453,11 +32453,11 @@
             {
               "team": "Bears",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 22,
+          "total_points": 30,
           "best_bet": null
         },
         {
@@ -32466,8 +32466,8 @@
             {
               "team": "Indiana",
               "points": 10,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 10
             },
             {
               "team": "Cal",
@@ -32478,8 +32478,8 @@
             {
               "team": "Navy",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Purdue",
@@ -32490,11 +32490,11 @@
             {
               "team": "Syracuse",
               "points": 2,
-              "result": "win",
-              "awarded_points": 2
+              "result": "loss",
+              "awarded_points": 0
             }
           ],
-          "total_points": 8,
+          "total_points": 10,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Indiana",
@@ -32525,8 +32525,8 @@
             {
               "team": "Bucs",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Jaguars",
@@ -32535,7 +32535,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 28,
+          "total_points": 24,
           "best_bet": {
             "time": "10:00a",
             "team": "Penn State",
@@ -32613,8 +32613,8 @@
             {
               "team": "Bears ",
               "points": 4,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 4
             },
             {
               "team": "Lions",
@@ -32623,7 +32623,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 10,
+          "total_points": 14,
           "best_bet": {
             "time": "11:00a",
             "team": "Purdue",
@@ -32691,8 +32691,8 @@
             {
               "team": "Charlotte",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "FAU",
@@ -32701,7 +32701,7 @@
               "awarded_points": 2
             }
           ],
-          "total_points": 6,
+          "total_points": 2,
           "best_bet": {
             "time": "2025-11-08T00:00:00",
             "team": "Maryland",
@@ -32714,8 +32714,8 @@
             {
               "team": "U Iowa",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "USF",
@@ -32732,17 +32732,17 @@
             {
               "team": "Missouri",
               "points": 4,
-              "result": "win",
-              "awarded_points": 4
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "Missouri State",
               "points": 2,
-              "result": "loss",
-              "awarded_points": 0
+              "result": "win",
+              "awarded_points": 2
             }
           ],
-          "total_points": 22,
+          "total_points": 10,
           "best_bet": {
             "time": "12:30p",
             "team": "Rutgers",
@@ -32755,20 +32755,20 @@
             {
               "team": "Syracuse",
               "points": 10,
-              "result": "win",
-              "awarded_points": 10
-            },
-            {
-              "team": "U Oregon",
-              "points": 8,
               "result": "loss",
               "awarded_points": 0
             },
             {
+              "team": "U Oregon",
+              "points": 8,
+              "result": "win",
+              "awarded_points": 8
+            },
+            {
               "team": "Louisiana Tech",
               "points": 6,
-              "result": "win",
-              "awarded_points": 6
+              "result": "loss",
+              "awarded_points": 0
             },
             {
               "team": "U Washington",
@@ -32783,7 +32783,7 @@
               "awarded_points": 0
             }
           ],
-          "total_points": 16,
+          "total_points": 8,
           "best_bet": null
         }
       ],
