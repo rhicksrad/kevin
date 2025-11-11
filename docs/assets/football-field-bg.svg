@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="fieldGlow" cx="50%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#1f6f3d" stop-opacity="0.95" />
+      <stop offset="65%" stop-color="#0f4525" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#082814" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="centerStripe" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="sidelineGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <pattern id="hashMarks" width="160" height="120" patternUnits="userSpaceOnUse">
+      <g stroke="#d9f8e8" stroke-width="4" stroke-linecap="round" opacity="0.6">
+        <line x1="55" x2="55" y1="36" y2="54" />
+        <line x1="105" x2="105" y1="66" y2="84" />
+      </g>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0b2b14" />
+  <rect width="1600" height="900" fill="url(#fieldGlow)" />
+
+  <!-- turf stripes -->
+  <g opacity="0.22">
+    <rect x="0" y="0" width="1600" height="900" fill="#ffffff" fill-opacity="0.07" />
+    <g fill="#ffffff" fill-opacity="0.04">
+      <rect x="0" y="0" width="1600" height="900" />
+      <rect x="0" y="60" width="1600" height="60" />
+      <rect x="0" y="180" width="1600" height="60" />
+      <rect x="0" y="300" width="1600" height="60" />
+      <rect x="0" y="420" width="1600" height="60" />
+      <rect x="0" y="540" width="1600" height="60" />
+      <rect x="0" y="660" width="1600" height="60" />
+      <rect x="0" y="780" width="1600" height="60" />
+    </g>
+  </g>
+
+  <!-- sidelines and end zones -->
+  <rect x="80" y="100" width="1440" height="700" rx="36" ry="36" fill="#115c2e" opacity="0.75" />
+  <rect x="100" y="120" width="1400" height="660" rx="30" ry="30" fill="#0d4022" />
+
+  <g fill="none" stroke="#e9ffe5" stroke-width="6" opacity="0.65">
+    <rect x="130" y="150" width="1340" height="600" rx="18" ry="18" />
+    <rect x="100" y="120" width="1400" height="660" rx="30" ry="30" />
+  </g>
+
+  <!-- yard lines -->
+  <g stroke="#d9f8e8" stroke-width="6" opacity="0.6">
+    <line x1="170" y1="180" x2="170" y2="690" />
+    <line x1="1430" y1="180" x2="1430" y2="690" />
+  </g>
+  <g stroke="#d9f8e8" stroke-width="4" opacity="0.45">
+    <line x1="230" y1="180" x2="230" y2="690" />
+    <line x1="290" y1="180" x2="290" y2="690" />
+    <line x1="350" y1="180" x2="350" y2="690" />
+    <line x1="410" y1="180" x2="410" y2="690" />
+    <line x1="470" y1="180" x2="470" y2="690" />
+    <line x1="530" y1="180" x2="530" y2="690" />
+    <line x1="590" y1="180" x2="590" y2="690" />
+    <line x1="650" y1="180" x2="650" y2="690" />
+    <line x1="710" y1="180" x2="710" y2="690" />
+    <line x1="770" y1="180" x2="770" y2="690" />
+    <line x1="830" y1="180" x2="830" y2="690" />
+    <line x1="890" y1="180" x2="890" y2="690" />
+    <line x1="950" y1="180" x2="950" y2="690" />
+    <line x1="1010" y1="180" x2="1010" y2="690" />
+    <line x1="1070" y1="180" x2="1070" y2="690" />
+    <line x1="1130" y1="180" x2="1130" y2="690" />
+    <line x1="1190" y1="180" x2="1190" y2="690" />
+    <line x1="1250" y1="180" x2="1250" y2="690" />
+    <line x1="1310" y1="180" x2="1310" y2="690" />
+    <line x1="1370" y1="180" x2="1370" y2="690" />
+  </g>
+
+  <!-- hash mark pattern overlay -->
+  <rect x="170" y="180" width="1260" height="510" fill="url(#hashMarks)" opacity="0.5" />
+
+  <!-- center logo embellishment -->
+  <circle cx="800" cy="435" r="90" fill="rgba(15, 85, 46, 0.75)" />
+  <circle cx="800" cy="435" r="76" fill="none" stroke="#e9ffe5" stroke-width="5" opacity="0.55" />
+  <path d="M800 375 l24 45 -24 45 -24 -45z" fill="#e9ffe5" opacity="0.45" />
+  <circle cx="800" cy="435" r="8" fill="#e9ffe5" opacity="0.65" />
+
+  <!-- sideline glows -->
+  <rect x="110" y="120" width="20" height="660" fill="url(#sidelineGlow)" opacity="0.5" />
+  <rect x="1470" y="120" width="20" height="660" fill="url(#sidelineGlow)" opacity="0.5" transform="scale(-1,1) translate(-2960,0)" />
+
+  <!-- vignette -->
+  <rect width="1600" height="900" fill="#04140a" opacity="0.18" />
+</svg>
